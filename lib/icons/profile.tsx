@@ -25,7 +25,6 @@ import {
 } from "~/components/ui/tooltip";
 import { CircleUser } from "~/lib/icons/CircleUser";
 import { ChevronRight } from "~/lib/icons/ChevronRight";
-import { BriefcaseBusiness } from "~/lib/icons/BriefcaseBusiness";
 
 const GITHUB_AVATAR_URI =
   "https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg";
@@ -45,8 +44,8 @@ export default function Profile() {
     },
     {
       name: "Workspace Settings",
-      icon: BriefcaseBusiness,
-      description: "Manage your workspace settings like name, members etc here.",
+      icon: CircleUser,
+      description: "Manage your workspace settings here like workspace name, members etc here.",
     }
 
   ]
@@ -54,13 +53,13 @@ export default function Profile() {
   return (
 
 
-    <View className="flex-1 mt-16 p-3 bg-secondary" style={styles.androidSafeAreaView}>
+    <View className="flex-1 mt-16 p-6 bg-secondary/30" style={styles.androidSafeAreaView}>
 
       <View className="mb-4">
         <Text style={styles.welcomeText}>Welcome Karan!</Text>
       </View>
 
-      <Card className="w-full rounded-2xl">
+      <Card className="w-full max-w-sm rounded-2xl">
         {/* <CardHeader>
           
           <View className="p-3" />
@@ -86,7 +85,7 @@ export default function Profile() {
 
 
           
-          <View className="flex flex-row items-center justify-between p-4 border-b-2 border-gray-50" key={index}>
+          <View className="flex flex-row items-center justify-between p-2 border-b-2 border-gray-50" key={index}>
 
             <View className="flex flex-row gap-4 items-center">
 
@@ -96,10 +95,10 @@ export default function Profile() {
               </View>
               
               <View className="w-72">
-                <Text style={{ fontSize: 16, }}>{setting.name}</Text>
+                <Text style={{ fontSize: 17, }}>{setting.name}</Text>
                 
-              <View>    
-                        <Text className="text-gray-600">{setting.description}</Text>
+              <View  >    
+                        <Text>{setting.description}</Text>
               </View>
 
             </View>

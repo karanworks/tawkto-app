@@ -16,49 +16,19 @@ const TabRoot = () => {
         name="index"
         options={{
           title: "Chats",
-          headerRight: () => (
-            <View className="pr-4">
-              <Inbox className="text-foreground" size={23} strokeWidth={1.25} />
-            </View>
-          ),
-          tabBarIcon: () => (
-            <MessageCircle
-              className="text-foreground"
-              size={23}
-              strokeWidth={1.25}
-            />
-          ),
         }}
       />
       <Tabs.Screen
         name="inbox"
         options={{
           title: "Inbox",
-          headerRight: () => (
-            <View className="pr-4">
-              <Inbox className="text-foreground" size={23} strokeWidth={1.25} />
-            </View>
-          ),
-          tabBarIcon: () => (
-            <Inbox
-              className="text-foreground"
-              size={23}
-              strokeWidth={1.25}
-            />
-          ),
+         
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
-          tabBarIcon: () => (
-            <UserRound
-              className="text-foreground"
-              size={23}
-              strokeWidth={1.25}
-            />
-          ),
+          headerShown: false
         }}
       />
     </Tabs>

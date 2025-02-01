@@ -23,6 +23,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import { chatsData } from "~/common/chatData";
 
 const GITHUB_AVATAR_URI =
   "https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg";
@@ -34,42 +35,7 @@ export default function Chats() {
     setProgress(Math.floor(Math.random() * 100));
   }
 
-  const chatsData = [
-    {
-      id: 1,
-      name: "Chetan Subedi",
-      // message: "Hey, Chetan this side",
-      message: "Hey, Chetan this side from Ascent BPO.",
-      messageCount: 3,
-      time: "02:15 PM",
-      initial: "C",
-    },
-    {
-      id: 2,
-      name: "Karan",
-      message: "Hey!",
-      messageCount: 3,
-      time: "01:23 PM",
-      initial: "K",
-    },
-    {
-      id: 3,
-      name: "Vicky",
-      message: "Hello guys welcome to my podcast!",
-      messageCount: 3,
-      time: "01:23 PM",
-      initial: "V",
-    },
-    {
-      id: 4,
-      name: "Pihu",
-      message: "Hello, I am pihu.",
-      messageCount: 3,
-      time: "01:23 PM",
-      initial: "P",
-    },
-  ];
-
+ 
   return (
     <View className="flex-1 items-center  bg-secondary/30 pt-2">
       {chatsData?.map((chat) => (
