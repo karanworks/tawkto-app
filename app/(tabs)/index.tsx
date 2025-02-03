@@ -23,6 +23,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import { chatsData } from "~/common/chatData";
 
 const GITHUB_AVATAR_URI =
   "https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg";
@@ -34,42 +35,7 @@ export default function Chats() {
     setProgress(Math.floor(Math.random() * 100));
   }
 
-  const chatsData = [
-    {
-      id: 1,
-      name: "Chetan Subedi",
-      // message: "Hey, Chetan this side",
-      message: "Hey, Chetan this side from Ascent BPO.",
-      messageCount: 3,
-      time: "02:15 PM",
-      initial: "C",
-    },
-    {
-      id: 2,
-      name: "Karan",
-      message: "Hey!",
-      messageCount: 3,
-      time: "01:23 PM",
-      initial: "K",
-    },
-    {
-      id: 3,
-      name: "Vicky",
-      message: "Hello guys welcome to my podcast!",
-      messageCount: 3,
-      time: "01:23 PM",
-      initial: "V",
-    },
-    {
-      id: 4,
-      name: "Pihu",
-      message: "Hello, I am pihu.",
-      messageCount: 3,
-      time: "01:23 PM",
-      initial: "P",
-    },
-  ];
-
+ 
   return (
     <View className="flex-1 items-center  bg-secondary/30 pt-2">
       {chatsData?.map((chat) => (
@@ -99,14 +65,14 @@ export default function Chats() {
             <View className="flex flex-row justify-between">
               <View>
                 <Text
-                  style={{ fontSize: 18, fontWeight: "bold", color: "#242424" }}
+                  style={{ fontSize: 16, fontWeight: "bold", color: "#242424" }}
                 >
                   {chat.name}
                 </Text>
               </View>
 
               <View>
-                <Text style={{ fontSize: 16, color: "#242424" }}>
+                <Text style={{ fontSize: 12, color: "#404040" }}>
                   {chat.time}
                 </Text>
               </View>
@@ -114,21 +80,21 @@ export default function Chats() {
             <View className="flex flex-row items-end justify-between align gap-2">
               <View style={{ width: 280 }}>
                 <Text
-                  style={{ fontSize: 18, color: "#404040" }}
+                  style={{ fontSize: 15, color: "#404040" }}
                   numberOfLines={1}
                 >
                   {chat.message}
                 </Text>
               </View>
 
-              <View
+              {/* <View
                 className="flex items-center justify-center rounded-full"
-                style={{ backgroundColor: "#25A0E2", height: 22, width: 22 }}
+                style={{ backgroundColor: "#25A0E2", height: 18, width: 18 }}
               >
-                <Text style={{ fontSize: 16, color: "white" }}>
+                <Text style={{ fontSize: 12, color: "white" }}>
                   {chat.messageCount}
                 </Text>
-              </View>
+              </View> */}
             </View>
           </View>
         </View>
