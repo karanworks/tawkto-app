@@ -28,6 +28,7 @@ const TabRoot = () => {
       <Tabs.Screen
         name="profile"
         options={{
+          title: "Profile",
           headerShown: false
         }}
       />

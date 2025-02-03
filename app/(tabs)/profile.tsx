@@ -91,7 +91,7 @@ export default function Profile() {
             <View className="flex flex-row gap-4 items-center">
 
             <View>
-                       {React.createElement(setting.icon, { className: "text-foreground", size: 23, strokeWidth: 1.25 })}
+                      {React.createElement(setting.icon, { className: "text-foreground", size: 23, strokeWidth: 1.25 })}
 
               </View>
               

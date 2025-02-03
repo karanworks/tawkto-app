@@ -65,14 +65,14 @@ export default function Chats() {
             <View className="flex flex-row justify-between">
               <View>
                 <Text
-                  style={{ fontSize: 18, fontWeight: "bold", color: "#242424" }}
+                  style={{ fontSize: 16, fontWeight: "bold", color: "#242424" }}
                 >
                   {chat.name}
                 </Text>
               </View>
 
               <View>
-                <Text style={{ fontSize: 16, color: "#242424" }}>
+                <Text style={{ fontSize: 12, color: "#404040" }}>
                   {chat.time}
                 </Text>
               </View>
@@ -80,21 +80,21 @@ export default function Chats() {
             <View className="flex flex-row items-end justify-between align gap-2">
               <View style={{ width: 280 }}>
                 <Text
-                  style={{ fontSize: 18, color: "#404040" }}
+                  style={{ fontSize: 15, color: "#404040" }}
                   numberOfLines={1}
                 >
                   {chat.message}
                 </Text>
               </View>
 
-              <View
+              {/* <View
                 className="flex items-center justify-center rounded-full"
-                style={{ backgroundColor: "#25A0E2", height: 22, width: 22 }}
+                style={{ backgroundColor: "#25A0E2", height: 18, width: 18 }}
               >
-                <Text style={{ fontSize: 16, color: "white" }}>
+                <Text style={{ fontSize: 12, color: "white" }}>
                   {chat.messageCount}
                 </Text>
-              </View>
+              </View> */}
             </View>
           </View>
         </View>
