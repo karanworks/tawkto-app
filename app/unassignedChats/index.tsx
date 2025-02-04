@@ -29,11 +29,11 @@ import { Input } from "~/components/ui/input";
 import { Search } from "~/lib/icons/Search";
 import { useRouter } from "expo-router";
 
-export default function Chats() {
+export default function UnassignedChats() {
   const router = useRouter();
 
   function handleNavigateToChat() {
-    router.push("/chat");
+    router.push("/unassignedChat");
   }
 
   return (

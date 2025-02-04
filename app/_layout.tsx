@@ -60,11 +60,36 @@ export default function RootLayout() {
         <Stack.Screen
           name="index"
           options={{
-            title: "Starter Base",
+            title: "Login",
             headerRight: () => <ThemeToggle />,
           }}
         />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="accountSettings/index"
+          options={{ title: "Account Settings" }}
+        />
+        <Stack.Screen
+          name="workspaceSettings/index"
+          options={{ title: "Workspace Settings" }}
+        />
+        <Stack.Screen name="chat/index" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="unassignedChats/index"
+          options={{ title: "Unassigned Chats" }}
+        />
+        <Stack.Screen
+          name="unassignedChat/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="solvedChat/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="solvedChats/index"
+          options={{ title: "Solved Chats " }}
+        />
       </Stack>
       <PortalHost />
     </ThemeProvider>

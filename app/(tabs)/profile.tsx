@@ -1,5 +1,12 @@
 import * as React from "react";
-import { StyleSheet, View, Platform, StatusBar } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Platform,
+  StatusBar,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import Animated, {
   FadeInUp,
   FadeOutDown,
@@ -26,36 +33,56 @@ import {
 import { CircleUser } from "~/lib/icons/CircleUser";
 import { ChevronRight } from "~/lib/icons/ChevronRight";
 import { BriefcaseBusiness } from "~/lib/icons/BriefcaseBusiness";
+import { UsersRound } from "~/lib/icons/UsersRound";
+import { useRouter } from "expo-router";
 
 const GITHUB_AVATAR_URI =
   "https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg";
 
 export default function Profile() {
   const [progress, setProgress] = React.useState(78);
+  const router = useRouter();
 
   function updateProgressValue() {
     setProgress(Math.floor(Math.random() * 100));
+  }
+
+  function handleNavigateToAccountSettings() {
+    router.push("/accountSettings");
+  }
+  function handleNavigateToWorkspaceSettings() {
+    router.push("/workspaceSettings");
   }
 
   const settings = [
     {
       name: "Account Settings",
       icon: CircleUser,
-      description: "Manage your name, email here.",
+      description: "Manage your name, email and other details here.",
+      onPress: handleNavigateToAccountSettings,
     },
     {
       name: "Workspace Settings",
       icon: BriefcaseBusiness,
-      description: "Manage your workspace settings like name, members etc here.",
-    }
-
-  ]
+      description:
+        "Manage your workspace settings like name, members etc here.",
+      onPress: handleNavigateToWorkspaceSettings,
+    },
+    {
+      name: "Manage Members",
+      icon: UsersRound,
+      description: "Invite new members and manage the older ones.",
+      onPress: () => {
+        console.log("Manager members button was clicked");
+      },
+    },
+  ];
 
   return (
-
-
-    <View className="flex-1 mt-16 p-3 bg-secondary" style={styles.androidSafeAreaView}>
-
+    <View
+      className="flex-1 p-3 bg-secondary"
+      style={styles.androidSafeAreaView}
+    >
       <View className="mb-4">
         <Text style={styles.welcomeText}>Welcome Karan!</Text>
       </View>
@@ -73,56 +100,45 @@ export default function Profile() {
           </View>
         </CardHeader> */}
         <CardContent className="p-4">
-
           <View>
+            {settings?.map((setting, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={setting.onPress}
+                activeOpacity={0.6}
+              >
+                <View className="flex flex-row items-center justify-between p-4 border-b-2 border-gray-50">
+                  <View className="flex flex-row gap-4 items-center">
+                    <View>
+                      {React.createElement(setting.icon, {
+                        className: "text-foreground",
+                        size: 23,
+                        strokeWidth: 1.25,
+                      })}
+                    </View>
 
+                    <View className="w-72">
+                      <Text style={{ fontSize: 16 }}>{setting.name}</Text>
 
-            {
-              
-              settings?.map((setting,index) => (
+                      <View>
+                        <Text className="text-gray-600">
+                          {setting.description}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
 
-
-
-
-
-          
-          <View className="flex flex-row items-center justify-between p-4 border-b-2 border-gray-50" key={index}>
-
-            <View className="flex flex-row gap-4 items-center">
-
-            <View>
-                      {React.createElement(setting.icon, { className: "text-foreground", size: 23, strokeWidth: 1.25 })}
-
-              </View>
-              
-              <View className="w-72">
-                <Text style={{ fontSize: 16, }}>{setting.name}</Text>
-                
-              <View>    
-                        <Text className="text-gray-600">{setting.description}</Text>
-              </View>
-
-            </View>
-            </View>
-
-            <View>
-                              <ChevronRight  className="text-foreground" size={23} strokeWidth={1.25}  />
-
-            </View>
-            
-            </View>
-
-
-
-
-
-              ))
-
-
-          }
-            
-
-            </View>
+                  <View>
+                    <ChevronRight
+                      className="text-foreground"
+                      size={23}
+                      strokeWidth={1.25}
+                    />
+                  </View>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
         </CardContent>
         {/* <CardFooter className="flex-col gap-3 pb-0">
           <View className="flex-row items-center overflow-hidden">
@@ -159,15 +175,13 @@ export default function Profile() {
   );
 }
 
-
 const styles = StyleSheet.create({
   androidSafeAreaView: {
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
-
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 
   welcomeText: {
     fontSize: 20,
-    fontWeight: "bold"
-  }
-})
+    fontWeight: "bold",
+  },
+});

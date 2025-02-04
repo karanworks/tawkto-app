@@ -6,12 +6,9 @@ import { MessageCircle } from "~/lib/icons/MessageCircle";
 import { UserRound } from "~/lib/icons/UserRound";
 import TabBar from "~/components/TabBar";
 
-
 const TabRoot = () => {
   return (
-    <Tabs
-      tabBar={props => <TabBar {...props} />}
-    >
+    <Tabs tabBar={(props) => <TabBar {...props} />}>
       <Tabs.Screen
         name="index"
         options={{
@@ -22,14 +19,13 @@ const TabRoot = () => {
         name="inbox"
         options={{
           title: "Inbox",
-         
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: "Profile",
-          headerShown: false
+          // headerShown: false
         }}
       />
     </Tabs>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Image, TouchableOpacity, View } from "react-native";
+import { Image, TouchableOpacity, View, Text } from "react-native";
 import Animated, {
   FadeInUp,
   FadeOutDown,
@@ -17,18 +17,16 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Progress } from "~/components/ui/progress";
-import { Text } from "~/components/ui/text";
+// import { Text } from "~/components/ui/text";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { Input } from "~/components/ui/input";
-import logoLight from "../assets/images/logo-light.png";
+const logoLight = require("../assets/images/logo-light.png");
 import { Link, useNavigation, useRouter } from "expo-router";
-
-const GITHUB_AVATAR_URI =
-  "https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg";
+import { Label } from "~/components/ui/label";
 
 export default function Screen() {
   const [progress, setProgress] = React.useState(78);
@@ -37,11 +35,6 @@ export default function Screen() {
 
   function updateProgressValue() {
     setProgress(Math.floor(Math.random() * 100));
-  }
-
-  // Handle the navigation when "Go to chats page" is clicked
-  function goToChatsPage() {
-    router.push("/(tab)/index"); // Replace with your actual route name
   }
 
   return (
@@ -56,28 +49,62 @@ export default function Screen() {
             </AvatarFallback>
 
           </Avatar> */}
-          <Image source={logoLight} style={{ width: 75, height: 75 }} />
-          <View className="p-3" />
-          <CardTitle className="pb-2 text-center">Login</CardTitle>
+          <Image source={logoLight} style={{ width: 60, height: 60 }} />
+          <View className="p-2" />
+          <View className="flex items-center pb-2 text-center">
+            <View style={{ marginBottom: 3 }}>
+              <Text
+                style={{
+                  fontSize: 25,
+                  fontWeight: "bold",
+                }}
+              >
+                Welcome back!
+              </Text>
+            </View>
+
+            <View>
+              <Text
+                style={{
+                  fontSize: 16,
+                }}
+                className="text-gray-600"
+              >
+                Please enter your details to login
+              </Text>
+            </View>
+          </View>
         </CardHeader>
         <CardContent>
-          <View className="justify-around gap-3 w-full">
-            <View className="items-center justify-between flex-row">
-              <Text className="text-foreground">Email</Text>
+          <View className="justify-around gap-4 w-full">
+            <View>
+              <Label
+                nativeID="email"
+                className="text-foreground text-gray-700"
+                style={{ fontSize: 16, marginBottom: 5 }}
+              >
+                Email
+              </Label>
               <Input
-                placeholder="Enter your email"
+                placeholder="example@gmail.com"
+                id="email"
                 aria-labelledby="email"
                 aria-errormessage="emailError"
-                className="w-64"
               />
             </View>
-            <View className="items-center justify-between flex-row">
-              <Text className="text-foreground">Password</Text>
+            <View>
+              <Label
+                nativeID="password"
+                className="text-foreground text-gray-700"
+                style={{ fontSize: 16, marginBottom: 5 }}
+              >
+                Password
+              </Label>
               <Input
+                id="password"
                 placeholder="Enter your password"
                 aria-labelledby="email"
                 aria-errormessage="emailError"
-                className="w-64"
               />
             </View>
           </View>
@@ -85,16 +112,16 @@ export default function Screen() {
         <CardFooter className="flex-col gap-3 pb-0">
           <Button
             variant="default"
-            className="shadow shadow-foreground/5"
+            className="shadow shadow-foreground/5 w-full"
             onPress={updateProgressValue}
             style={{ backgroundColor: "#25A0E2" }}
           >
-            <Text>Login</Text>
+            <Text style={{ color: "white" }}>Login</Text>
           </Button>
 
           {/* onPress={goToChatsPage} */}
           <TouchableOpacity>
-            <Link href="(tabs)">
+            <Link href="/(tabs)">
               <Text className="text-blue-500">Go to chats page</Text>
             </Link>
           </TouchableOpacity>
