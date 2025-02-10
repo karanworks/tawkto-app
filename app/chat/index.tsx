@@ -13,8 +13,11 @@ import {
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { Messagetype } from "../../.expo/types/types";
-
+import { ChatType, Messagetype } from "../../.expo/types/types";
+import { useColorScheme } from "react-native"; // Import this
+import { useSelector } from "react-redux";
+import moment from "moment";
+import { RootState } from "../_layout";
 // interface MessageType {
 //   id: string;
 //   text: string;
@@ -23,6 +26,13 @@ import { Messagetype } from "../../.expo/types/types";
 // }
 
 function ChatMessaging() {
+  const colorScheme = useColorScheme();
+  const iconColor = colorScheme === "dark" ? "#fff" : "#000";
+
+  const activeChat = useSelector(
+    (state: RootState) => state.Chats.activeChat
+  ) as ChatType | null;
+
   const [messages, setMessages] = useState([
     { id: "1", text: "Hello!", sender: "them", timestamp: "02:15 PM" },
     {
@@ -60,14 +70,59 @@ function ChatMessaging() {
     setNewMessage("");
   };
 
-  const renderMessage: ListRenderItem<Messagetype> = ({ item }) => (
+  interface ItemPropType {
+    item: Messagetype;
+  }
+
+  const renderMessage: ListRenderItem<Messagetype> = ({
+    item: message,
+  }: ItemPropType) => (
+    // <View
+    //   style={[
+    //     styles.messageContainer,
+    //     item.sender === "me" ? styles.myMessage : styles.theirMessage,
+    //   ]}
+    // >
+    //   {item.sender === "them" && (
+    //     <View style={styles.avatar}>
+    //       <Text style={styles.avatarText}>C</Text>
+    //     </View>
+    //   )}
+    //   <View\
+    //     style={[
+    //       styles.messageBubble,
+    //       item.sender === "me" ? styles.myBubble : styles.theirBubble,
+    //     ]}
+    //   >
+    //     <Text
+    //       style={[
+    //         styles.messageText,
+    //         item.sender === "me"
+    //           ? styles.myMessageText
+    //           : styles.theirMessageText,
+    //       ]}
+    //     >
+    //       {item.text}
+    //     </Text>
+    //     <Text
+    //       style={[
+    //         styles.timestamp,
+    //         item.sender === "me" ? styles.myTimestamp : styles.theirTimestamp,
+    //       ]}
+    //     >
+    //       {item.timestamp}
+    //     </Text>
+    //   </View>
+    // </View>
     <View
       style={[
         styles.messageContainer,
-        item.sender === "me" ? styles.myMessage : styles.theirMessage,
+        message.sender.type === "visitor"
+          ? styles.myMessage
+          : styles.theirMessage,
       ]}
     >
-      {item.sender === "them" && (
+      {message.sender.type === "agent" && (
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>C</Text>
         </View>
@@ -75,40 +130,46 @@ function ChatMessaging() {
       <View
         style={[
           styles.messageBubble,
-          item.sender === "me" ? styles.myBubble : styles.theirBubble,
+          message.sender.type === "visitor"
+            ? styles.myBubble
+            : styles.theirBubble,
         ]}
       >
         <Text
           style={[
             styles.messageText,
-            item.sender === "me"
+            message.sender.type === "visitor"
               ? styles.myMessageText
               : styles.theirMessageText,
           ]}
         >
-          {item.text}
+          {message.content}
         </Text>
         <Text
           style={[
             styles.timestamp,
-            item.sender === "me" ? styles.myTimestamp : styles.theirTimestamp,
+            message.sender.type === "visitor"
+              ? styles.myTimestamp
+              : styles.theirTimestamp,
           ]}
         >
-          {item.timestamp}
+          {moment(message.createdAt).fromNow()}
         </Text>
       </View>
     </View>
   );
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
+    <>
+    {activeChat && <KeyboardAvoidingView
+      className="bg-background"
+      style={{ ...styles.container }}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
     >
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="chevron-back" size={24} color="#000" />
+          <Ionicons name="chevron-back" size={24} color={iconColor} />
         </TouchableOpacity>
 
         <View className="flex flex-row gap-2">
@@ -117,14 +178,16 @@ function ChatMessaging() {
           </View>
 
           <View>
-            <Text style={styles.headerTitle}>Chetan Subedi</Text>
-            <Text className="text-fray-700 text-sm">Online</Text>
+            <Text className="text-primary" style={styles.headerTitle}>
+              {activeChat.visitor.name}
+            </Text>
+            <Text className="text-primary text-sm">Online</Text>
           </View>
         </View>
       </View>
 
       <FlatList
-        data={messages}
+        data={activeChat.messages}
         renderItem={renderMessage}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.messagesList}
@@ -151,7 +214,8 @@ function ChatMessaging() {
           />
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </KeyboardAvoidingView>}
+    </>
   );
 }
 
@@ -160,7 +224,7 @@ export default ChatMessaging;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    // backgroundColor: "#FFFFFF",
   },
   header: {
     flexDirection: "row",
@@ -170,7 +234,7 @@ const styles = StyleSheet.create({
       Platform.OS === "android" && StatusBar.currentHeight
         ? StatusBar.currentHeight + 16
         : 16,
-    backgroundColor: "#FFFFFF",
+    // backgroundColor: "#FFFFFF",
     borderBottomWidth: 1,
     borderBottomColor: "#E5E5E5",
   },
@@ -257,7 +321,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     padding: 16,
-    backgroundColor: "#FFFFFF",
+    // backgroundColor: "#FFFFFF",
     borderTopWidth: 1,
     borderTopColor: "#E5E5E5",
     alignItems: "flex-end",

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import Animated, {
   FadeInUp,
   FadeOutDown,
@@ -24,15 +24,33 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { chatsData } from "~/common/chatData";
+import { ChatType } from "~/.expo/types/types";
+import { useAppDispatch } from "~/hooks/useAppDispatch";
+import { useRouter } from "expo-router";
+import { getUnassignedChatMessages } from "~/slices/inbox/thunk";
+import moment from "moment";
 
 const GITHUB_AVATAR_URI =
   "https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg";
 
-function InboxChat({ chat }) {
+interface PropType {
+  chat: ChatType;
+}
+
+function InboxChat({ chat }: PropType) {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  function handleNavigateToChat(chatId: string) {
+    dispatch(getUnassignedChatMessages({ chatId }));
+    router.push("/unassignedChat");
+  }
+
   return (
-    <View
+    <Pressable
       className="flex flex-row items-center w-full gap-2 border-b border-b-gray-100 "
       style={{ height: 70 }}
+      onPress={() => handleNavigateToChat(chat.id)}
     >
       <View
         className="flex justify-center items-center rounded-full "
@@ -46,7 +64,7 @@ function InboxChat({ chat }) {
               fontSize: 20,
             }}
           >
-            {chat.initial}
+            {chat.visitor.name.charAt(0)}
           </Text>
         </View>
       </View>
@@ -55,24 +73,32 @@ function InboxChat({ chat }) {
         <View className="flex flex-row justify-between">
           <View>
             <Text
+              className="text-primary"
               style={{
                 fontSize: 16,
                 fontWeight: "bold",
-                color: "red#333333",
+                // color: "#333333",
               }}
             >
-              {chat.name}
+              {chat.visitor.name}
             </Text>
           </View>
 
           <View>
-            <Text style={{ fontSize: 12, color: "#404040" }}>{chat.time}</Text>
+            <Text style={{ fontSize: 12, color: "#404040" }}>
+              {chat.messages.length !== 0
+                ? moment(
+                    chat.messages[chat.messages.length - 1].createdAt
+                  ).fromNow()
+                : "No messages"}
+            </Text>
           </View>
         </View>
         <View className="flex flex-row items-end justify-between align gap-2">
           <View>
             <Text style={{ fontSize: 15, color: "#404040" }} numberOfLines={1}>
-              {chat.message}
+              {chat.messages.length !== 0 &&
+                chat.messages[chat.messages.length - 1].content}
             </Text>
           </View>
 
@@ -86,7 +112,7 @@ function InboxChat({ chat }) {
           </View> */}
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
 

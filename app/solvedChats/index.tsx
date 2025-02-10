@@ -28,13 +28,43 @@ import Chat from "~/components/Chat";
 import { Input } from "~/components/ui/input";
 import { Search } from "~/lib/icons/Search";
 import { useRouter } from "expo-router";
+import SolvedChat from "~/components/SolvedChat";
+import { useSelector } from "react-redux";
+import { RootState } from "../_layout";
+import { ChatType, User } from "~/.expo/types/types";
+import { useAppDispatch } from "~/hooks/useAppDispatch";
+import { getItem } from "~/helper/storage";
+import { getSolvedChats } from "~/slices/inbox/thunk";
 
 export default function SolvedChats() {
-  const router = useRouter();
+  const [user, setUser] = React.useState<User | null>(null);
 
-  function handleNavigateToChat() {
-    router.push("/solvedChat");
-  }
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const { solvedChats } = useSelector((state: RootState) => state.Inbox);
+
+  console.log("SOLVED CHATS INSIDE THE PAGE ->", solvedChats);
+
+  React.useEffect(() => {
+    async function loadUser() {
+      const storedUser = await getItem("user");
+      if (storedUser) setUser(storedUser);
+    }
+    loadUser();
+  }, []);
+
+  React.useEffect(() => {
+    if (!user) return;
+
+    dispatch(
+      getSolvedChats({ workspaceId: user.workspace.id, agentId: user.id })
+    );
+  }, [user]);
+
+  // function handleNavigateToChat() {
+  //   router.push("/solvedChat");
+  // }
 
   return (
     <View className="flex-1 items-center  bg-secondary/30 px-3">
@@ -43,8 +73,8 @@ export default function SolvedChats() {
         <Search style={{ position: "absolute", zIndex: 9999999 }} />
       </View>
 
-      {chatsData?.map((chat) => (
-        <Chat key={chat.id} chat={{ ...chat, handleNavigateToChat }} />
+      {solvedChats?.map((chat: ChatType) => (
+        <SolvedChat key={chat.id} chat={{ ...chat }} />
       ))}
     </View>
   );

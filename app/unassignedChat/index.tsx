@@ -13,9 +13,16 @@ import {
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { Messagetype } from "../../.expo/types/types";
+import { ChatType, Messagetype } from "../../.expo/types/types";
+import { useSelector } from "react-redux";
+import { RootState } from "../_layout";
+import moment from "moment";
 
 function UnassignedChat() {
+  const unassingedActiveChat = useSelector(
+    (state: RootState) => state.Inbox.unassingedActiveChat
+  ) as ChatType | null;
+
   const [messages, setMessages] = useState([
     { id: "1", text: "Hello!", sender: "them", timestamp: "02:15 PM" },
     {
@@ -53,14 +60,20 @@ function UnassignedChat() {
     setNewMessage("");
   };
 
-  const renderMessage: ListRenderItem<Messagetype> = ({ item }) => (
+  interface ItemPropType {
+    item: Messagetype;
+  }
+
+  const renderMessage: ListRenderItem<Messagetype> = ({
+    item,
+  }: ItemPropType) => (
     <View
       style={[
         styles.messageContainer,
-        item.sender === "me" ? styles.myMessage : styles.theirMessage,
+        item.sender.type === "visitor" ? styles.myMessage : styles.theirMessage,
       ]}
     >
-      {item.sender === "them" && (
+      {item.sender.type === "agent" && (
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>C</Text>
         </View>
@@ -68,82 +81,90 @@ function UnassignedChat() {
       <View
         style={[
           styles.messageBubble,
-          item.sender === "me" ? styles.myBubble : styles.theirBubble,
+          item.sender.type === "visitor" ? styles.myBubble : styles.theirBubble,
         ]}
       >
         <Text
           style={[
             styles.messageText,
-            item.sender === "me"
+            item.sender.type === "visitor"
               ? styles.myMessageText
               : styles.theirMessageText,
           ]}
         >
-          {item.text}
+          {item.content}
         </Text>
         <Text
           style={[
             styles.timestamp,
-            item.sender === "me" ? styles.myTimestamp : styles.theirTimestamp,
+            item.sender.type === "visitor"
+              ? styles.myTimestamp
+              : styles.theirTimestamp,
           ]}
         >
-          {item.timestamp}
+          {moment(item.createdAt).fromNow()}
         </Text>
       </View>
     </View>
   );
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
-    >
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="chevron-back" size={24} color="#000" />
-        </TouchableOpacity>
-
-        <View className="flex flex-row gap-2">
-          <View style={styles.headerAvatar}>
-            <Text style={styles.headerAvatarText}>C</Text>
-          </View>
-
-          <View>
-            <Text style={styles.headerTitle}>Chetan Subedi</Text>
-            <Text className="text-fray-700 text-sm">Online</Text>
-          </View>
-        </View>
-      </View>
-
-      <FlatList
-        data={messages}
-        renderItem={renderMessage}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.messagesList}
-        inverted={false}
-      />
-
-      <View style={styles.joinButtonContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            console.log("JOINED CHAT");
-          }}
-          style={styles.joinButton}
+    <>
+      {unassingedActiveChat && (
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
         >
-          <View>
-            <Text style={{ color: "white", fontSize: 16 }}>
-              Join Conversation
-            </Text>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="chevron-back" size={24} color="#000" />
+            </TouchableOpacity>
+
+            <View className="flex flex-row gap-2">
+              <View style={styles.headerAvatar}>
+                <Text style={styles.headerAvatarText}>C</Text>
+              </View>
+
+              <View>
+                <Text style={styles.headerTitle}>
+                  {unassingedActiveChat.visitor.name}
+                </Text>
+                <Text className="text-fray-700 text-sm">Online</Text>
+              </View>
+            </View>
           </View>
-        </TouchableOpacity>
-        <View>
-          <Text style={{ fontSize: 15, color: "#99A1AF" }}>
-            Join conversation to start chatting!
-          </Text>
-        </View>
-      </View>
-    </KeyboardAvoidingView>
+
+          <FlatList
+            data={unassingedActiveChat.messages}
+            renderItem={renderMessage}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.messagesList}
+            inverted={false}
+          />
+
+          <View style={styles.joinButtonContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("JOINED CHAT");
+              }}
+              style={styles.joinButton}
+            >
+              <View>
+                <Text style={{ color: "white", fontSize: 16 }}>
+                  Join Conversation
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <View>
+              <Text style={{ fontSize: 15, color: "#99A1AF" }}>
+                Join conversation to start chatting!
+              </Text>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      )}
+    </>
   );
 }
 

@@ -26,9 +26,35 @@ import {
 import { chatsData } from "~/common/chatData";
 import InboxChat from "~/components/InboxChat";
 import { useRouter } from "expo-router";
+import { useSelector } from "react-redux";
+import { RootState } from "../_layout";
+import { ChatType, User } from "~/.expo/types/types";
+import { getItem } from "~/helper/storage";
+import { useAppDispatch } from "~/hooks/useAppDispatch";
+import { getUnassignedChats } from "~/slices/inbox/thunk";
 
 export default function Inbox() {
+  const [user, setUser] = React.useState<User | null>(null);
+
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { unassignedChats } = useSelector((state: RootState) => state.Inbox);
+
+  React.useEffect(() => {
+    async function loadUser() {
+      const storedUser = await getItem("user");
+      if (storedUser) setUser(storedUser);
+    }
+    loadUser();
+  }, []);
+
+  React.useEffect(() => {
+    if (!user) return;
+
+    dispatch(
+      getUnassignedChats({ workspaceId: user.workspace.id, agentId: user.id })
+    );
+  }, [user]);
 
   function handleNavigateToUnassignedChats() {
     console.log("UNASSIGNED FUNCTION BEING CALLED");
@@ -87,18 +113,22 @@ export default function Inbox() {
         <View>
           <View>
             <Text
+              className="text-primary"
               style={{
                 fontSize: 18,
                 fontWeight: "bold",
                 marginBottom: 5,
-                color: "#3b3b3b",
+                // color: "#3b3b3b",
               }}
             >
               Latest Unassigned Messages
             </Text>
           </View>
           <View>
-            {chatsData.map((chat) => (
+            {/* {chatsData.map((chat) => (
+              <InboxChat key={chat.id} chat={chat} />
+            ))} */}
+            {unassignedChats.map((chat: ChatType) => (
               <InboxChat key={chat.id} chat={chat} />
             ))}
           </View>

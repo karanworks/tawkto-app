@@ -28,9 +28,33 @@ import Chat from "~/components/Chat";
 import { Input } from "~/components/ui/input";
 import { Search } from "~/lib/icons/Search";
 import { useRouter } from "expo-router";
+import { useAppDispatch } from "~/hooks/useAppDispatch";
+import { getChats } from "~/slices/chats/thunk";
+import { getItem } from "~/helper/storage";
+import { User, ChatType } from "../../.expo/types/types";
+import { useSelector } from "react-redux";
+import { RootState } from "../_layout";
 
 export default function Chats() {
+  const [user, setUser] = React.useState<User | null>(null);
+
+  const { chats } = useSelector((state: RootState) => state.Chats);
+
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  React.useEffect(() => {
+    async function loadUser() {
+      const storedUser = await getItem("user");
+      if (storedUser) setUser(storedUser);
+    }
+    loadUser();
+  }, []);
+
+  React.useEffect(() => {
+    if (!user) return;
+
+    dispatch(getChats({ workspaceId: user.workspace.id, agentId: user.id }));
+  }, [user]);
 
   function handleNavigateToChat() {
     router.push("/chat");
@@ -43,8 +67,11 @@ export default function Chats() {
         <Search style={{ position: "absolute", zIndex: 9999999 }} />
       </View>
 
-      {chatsData?.map((chat) => (
+      {/* {chatsData?.map((chat) => (
         <Chat key={chat.id} chat={{ ...chat, handleNavigateToChat }} />
+      ))} */}
+      {chats?.map((chat: ChatType) => (
+        <Chat key={chat.id} chat={{ ...chat }} />
       ))}
     </View>
   );

@@ -28,13 +28,18 @@ import Chat from "~/components/Chat";
 import { Input } from "~/components/ui/input";
 import { Search } from "~/lib/icons/Search";
 import { useRouter } from "expo-router";
+import { RootState } from "../_layout";
+import { ChatType } from "~/.expo/types/types";
+import { useSelector } from "react-redux";
+import InboxChat from "~/components/InboxChat";
 
 export default function UnassignedChats() {
   const router = useRouter();
+  const { unassignedChats } = useSelector((state: RootState) => state.Inbox);
 
-  function handleNavigateToChat() {
-    router.push("/unassignedChat");
-  }
+  // function handleNavigateToChat() {
+  //   router.push("/unassignedChat");
+  // }
 
   return (
     <View className="flex-1 items-center  bg-secondary/30 px-3">
@@ -43,8 +48,8 @@ export default function UnassignedChats() {
         <Search style={{ position: "absolute", zIndex: 9999999 }} />
       </View>
 
-      {chatsData?.map((chat) => (
-        <Chat key={chat.id} chat={{ ...chat, handleNavigateToChat }} />
+      {unassignedChats?.map((chat: ChatType) => (
+        <InboxChat key={chat.id} chat={{ ...chat }} />
       ))}
     </View>
   );

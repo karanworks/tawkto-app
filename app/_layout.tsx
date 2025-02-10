@@ -15,6 +15,9 @@ import { useColorScheme } from "~/lib/useColorScheme";
 import { PortalHost } from "@rn-primitives/portal";
 import { ThemeToggle } from "~/components/ThemeToggle";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+import rootReducer from "../slices";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -24,6 +27,13 @@ const DARK_THEME: Theme = {
   ...DarkTheme,
   colors: NAV_THEME.dark,
 };
+
+const store = configureStore({ reducer: rootReducer });
+
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<typeof store.getState>;
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+export type AppDispatch = typeof store.dispatch;
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -54,45 +64,47 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-      <Stack>
-        <Stack.Screen
-          name="index"
-          options={{
-            title: "Login",
-            headerRight: () => <ThemeToggle />,
-          }}
-        />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="accountSettings/index"
-          options={{ title: "Account Settings" }}
-        />
-        <Stack.Screen
-          name="workspaceSettings/index"
-          options={{ title: "Workspace Settings" }}
-        />
-        <Stack.Screen name="chat/index" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="unassignedChats/index"
-          options={{ title: "Unassigned Chats" }}
-        />
-        <Stack.Screen
-          name="unassignedChat/index"
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="solvedChat/index"
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="solvedChats/index"
-          options={{ title: "Solved Chats " }}
-        />
-      </Stack>
-      <PortalHost />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+        <Stack>
+          <Stack.Screen
+            name="index"
+            options={{
+              title: "Login",
+              headerRight: () => <ThemeToggle />,
+            }}
+          />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="accountSettings/index"
+            options={{ title: "Account Settings" }}
+          />
+          <Stack.Screen
+            name="workspaceSettings/index"
+            options={{ title: "Workspace Settings" }}
+          />
+          <Stack.Screen name="chat/index" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="unassignedChats/index"
+            options={{ title: "Unassigned Chats" }}
+          />
+          <Stack.Screen
+            name="unassignedChat/index"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="solvedChat/index"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="solvedChats/index"
+            options={{ title: "Solved Chats " }}
+          />
+        </Stack>
+        <PortalHost />
+      </ThemeProvider>
+    </Provider>
   );
 }
 

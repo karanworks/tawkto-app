@@ -1,28 +1,56 @@
 import * as React from "react";
 import { Pressable, View } from "react-native";
+import Animated, {
+  FadeInUp,
+  FadeOutDown,
+  LayoutAnimationConfig,
+} from "react-native-reanimated";
+import { Info } from "~/lib/icons/Info";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import { Progress } from "~/components/ui/progress";
 import { Text } from "~/components/ui/text";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
+import { chatsData } from "~/common/chatData";
 import { ChatType } from "~/.expo/types/types";
-import moment from "moment";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
-import { getChatMessages } from "~/slices/chats/thunk";
 import { useRouter } from "expo-router";
+import { getSolvedChatMessages } from "~/slices/inbox/thunk";
+import moment from "moment";
 
-interface ChatProps {
+const GITHUB_AVATAR_URI =
+  "https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg";
+
+interface PropType {
   chat: ChatType;
 }
 
-function Chat({ chat }: ChatProps) {
+function SolvedChat({ chat }: PropType) {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   function handleNavigateToChat(chatId: string) {
-    dispatch(getChatMessages({ chatId }));
-    router.push("/chat");
+    console.log("CHAT ID FOR SOLVED CHAT ->", chatId);
+
+    dispatch(getSolvedChatMessages({ chatId }));
+    router.push("/solvedChat");
   }
 
   return (
     <Pressable
-      className="flex flex-row items-center w-full gap-3 border-b border-b-gray-100 "
+      className="flex flex-row items-center w-full gap-2 border-b border-b-gray-100 "
       style={{ height: 70 }}
       onPress={() => handleNavigateToChat(chat.id)}
     >
@@ -43,7 +71,7 @@ function Chat({ chat }: ChatProps) {
         </View>
       </View>
 
-      <View className="flex gap-1" style={{ width: 300 }}>
+      <View className="flex gap-1" style={{ width: 290 }}>
         <View className="flex flex-row justify-between">
           <View>
             <Text
@@ -69,7 +97,7 @@ function Chat({ chat }: ChatProps) {
           </View>
         </View>
         <View className="flex flex-row items-end justify-between align gap-2">
-          <View style={{ width: 280 }}>
+          <View>
             <Text style={{ fontSize: 15, color: "#404040" }} numberOfLines={1}>
               {chat.messages.length !== 0 &&
                 chat.messages[chat.messages.length - 1].content}
@@ -77,17 +105,17 @@ function Chat({ chat }: ChatProps) {
           </View>
 
           {/* <View
-                className="flex items-center justify-center rounded-full"
-                style={{ backgroundColor: "#25A0E2", height: 18, width: 18 }}
-              >
-                <Text style={{ fontSize: 12, color: "white" }}>
-                  {chat.messageCount}
-                </Text>
-              </View> */}
+            className="flex items-center justify-center rounded-full"
+            style={{ backgroundColor: "#25A0E2", height: 18, width: 18 }}
+          >
+            <Text style={{ fontSize: 12, color: "white" }}>
+              {chat.messageCount}
+            </Text>
+          </View> */}
         </View>
       </View>
     </Pressable>
   );
 }
 
-export default Chat;
+export default SolvedChat;

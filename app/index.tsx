@@ -1,12 +1,5 @@
-import * as React from "react";
+import { useState } from "react";
 import { Image, TouchableOpacity, View, Text } from "react-native";
-import Animated, {
-  FadeInUp,
-  FadeOutDown,
-  LayoutAnimationConfig,
-} from "react-native-reanimated";
-import { Info } from "~/lib/icons/Info";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -16,46 +9,45 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Progress } from "~/components/ui/progress";
-// import { Text } from "~/components/ui/text";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
 import { Input } from "~/components/ui/input";
 const logoLight = require("../assets/images/logo-light.png");
 import { Link, useNavigation, useRouter } from "expo-router";
 import { Label } from "~/components/ui/label";
+import { useSelector } from "react-redux";
+import { login } from "../slices/login/thunk";
+import { useAppDispatch } from "~/hooks/useAppDispatch";
 
 export default function Screen() {
-  const [progress, setProgress] = React.useState(78);
-  const navigation = useNavigation();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
-  function updateProgressValue() {
-    setProgress(Math.floor(Math.random() * 100));
+  function handleFormSubmit() {
+    dispatch(login({ email, password })).then((res) => {
+      router.push("/(tabs)");
+    });
+  }
+
+  function handleEmailChange(text: string) {
+    setEmail(text);
+  }
+  function handlePasswordChange(text: string) {
+    setPassword(text);
   }
 
   return (
     <View className="flex-1 justify-center items-center gap-5 p-6 bg-secondary/30">
       <Card className="w-full max-w-sm pb-6 rounded-2xl">
         <CardHeader className="items-center">
-          {/* <Avatar alt="Rick Sanchez's Avatar" className="w-24 h-24">
-          <AvatarImage source={{ uri: GITHUB_AVATAR_URI }} />
-          <AvatarImage source={logoLight} />
-            <AvatarFallback>
-              <Text>Webwers</Text>
-            </AvatarFallback>
-
-          </Avatar> */}
           <Image source={logoLight} style={{ width: 60, height: 60 }} />
           <View className="p-2" />
           <View className="flex items-center pb-2 text-center">
             <View style={{ marginBottom: 3 }}>
               <Text
+                className="text-primary"
                 style={{
-                  fontSize: 25,
+                  fontSize: 22,
                   fontWeight: "bold",
                 }}
               >
@@ -80,7 +72,7 @@ export default function Screen() {
             <View>
               <Label
                 nativeID="email"
-                className="text-foreground text-gray-700"
+                className="text-primary"
                 style={{ fontSize: 16, marginBottom: 5 }}
               >
                 Email
@@ -90,12 +82,14 @@ export default function Screen() {
                 id="email"
                 aria-labelledby="email"
                 aria-errormessage="emailError"
+                value={email}
+                onChangeText={handleEmailChange}
               />
             </View>
             <View>
               <Label
                 nativeID="password"
-                className="text-foreground text-gray-700"
+                className="text-primary"
                 style={{ fontSize: 16, marginBottom: 5 }}
               >
                 Password
@@ -105,6 +99,9 @@ export default function Screen() {
                 placeholder="Enter your password"
                 aria-labelledby="email"
                 aria-errormessage="emailError"
+                value={password}
+                onChangeText={handlePasswordChange}
+                secureTextEntry
               />
             </View>
           </View>
@@ -113,8 +110,8 @@ export default function Screen() {
           <Button
             variant="default"
             className="shadow shadow-foreground/5 w-full"
-            onPress={updateProgressValue}
             style={{ backgroundColor: "#25A0E2" }}
+            onPress={handleFormSubmit}
           >
             <Text style={{ color: "white" }}>Login</Text>
           </Button>

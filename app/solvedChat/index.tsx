@@ -13,54 +13,33 @@ import {
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { Messagetype } from "../../.expo/types/types";
+import { ChatType, Messagetype } from "../../.expo/types/types";
+import { RootState } from "../_layout";
+import { useSelector } from "react-redux";
+import moment from "moment";
 
 function SolvedChat() {
-  const [messages, setMessages] = useState([
-    { id: "1", text: "Hello!", sender: "them", timestamp: "02:15 PM" },
-    {
-      id: "2",
-      text: "Hi there! How are you?",
-      sender: "me",
-      timestamp: "02:16 PM",
-    },
-    {
-      id: "3",
-      text: "I m doing great, thanks for asking!",
-      sender: "them",
-      timestamp: "02:17 PM",
-    },
-  ]);
-  const [newMessage, setNewMessage] = useState("");
+  // const { solvedActiveChat } = useSelector((state: RootState) => state.Inbox);
+  const solvedActiveChat = useSelector(
+    (state: RootState) => state.Inbox.solvedActiveChat
+  ) as ChatType | null;
 
   const router = useRouter();
 
-  const sendMessage = () => {
-    if (newMessage.trim().length === 0) return;
+  interface ItemPropType {
+    item: Messagetype;
+  }
 
-    const message = {
-      id: Date.now().toString(),
-      text: newMessage,
-      sender: "me",
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      }),
-    };
-
-    setMessages([...messages, message]);
-    setNewMessage("");
-  };
-
-  const renderMessage: ListRenderItem<Messagetype> = ({ item }) => (
+  const renderMessage: ListRenderItem<Messagetype> = ({
+    item,
+  }: ItemPropType) => (
     <View
       style={[
         styles.messageContainer,
-        item.sender === "me" ? styles.myMessage : styles.theirMessage,
+        item.sender.type === "visitor" ? styles.myMessage : styles.theirMessage,
       ]}
     >
-      {item.sender === "them" && (
+      {item.sender.type === "agent" && (
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>C</Text>
         </View>
@@ -68,82 +47,92 @@ function SolvedChat() {
       <View
         style={[
           styles.messageBubble,
-          item.sender === "me" ? styles.myBubble : styles.theirBubble,
+          item.sender.type === "visitor" ? styles.myBubble : styles.theirBubble,
         ]}
       >
         <Text
           style={[
             styles.messageText,
-            item.sender === "me"
+            item.sender.type === "visitor"
               ? styles.myMessageText
               : styles.theirMessageText,
           ]}
         >
-          {item.text}
+          {item.content}
         </Text>
         <Text
           style={[
             styles.timestamp,
-            item.sender === "me" ? styles.myTimestamp : styles.theirTimestamp,
+            item.sender.type === "visitor"
+              ? styles.myTimestamp
+              : styles.theirTimestamp,
           ]}
         >
-          {item.timestamp}
+          {moment(item.createdAt).fromNow()}
         </Text>
       </View>
     </View>
   );
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
-    >
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="chevron-back" size={24} color="#000" />
-        </TouchableOpacity>
-
-        <View className="flex flex-row gap-2">
-          <View style={styles.headerAvatar}>
-            <Text style={styles.headerAvatarText}>C</Text>
-          </View>
-
-          <View>
-            <Text style={styles.headerTitle}>Chetan Subedi</Text>
-            <Text className="text-fray-700 text-sm">Online</Text>
-          </View>
-        </View>
-      </View>
-
-      <FlatList
-        data={messages}
-        renderItem={renderMessage}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.messagesList}
-        inverted={false}
-      />
-
-      <View style={styles.joinButtonContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            console.log("JOINED CHAT");
-          }}
-          style={styles.joinButton}
+    <>
+      {solvedActiveChat && (
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
         >
-          <View>
-            <Text style={{ color: "white", fontSize: 16 }}>
-              Start Conversation Again
-            </Text>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="chevron-back" size={24} color="#000" />
+            </TouchableOpacity>
+
+            <View className="flex flex-row gap-2">
+              <View style={styles.headerAvatar}>
+                <Text style={styles.headerAvatarText}>C</Text>
+              </View>
+
+              <View>
+                <Text style={styles.headerTitle}>
+                  {solvedActiveChat.visitor.name}
+                </Text>
+                <Text className="text-fray-700 text-sm">Online</Text>
+              </View>
+            </View>
           </View>
-        </TouchableOpacity>
-        <View>
-          <Text style={{ fontSize: 15, color: "#99A1AF" }}>
-            Start conversation to start chatting again!
-          </Text>
-        </View>
-      </View>
-    </KeyboardAvoidingView>
+
+          <FlatList
+            data={solvedActiveChat.messages}
+            renderItem={renderMessage}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.messagesList}
+            inverted={false}
+          />
+
+          <View style={styles.joinButtonContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("CONVERSATION STARTED");
+              }}
+              style={styles.joinButton}
+            >
+              <View>
+                <Text
+                  style={{ color: "white", fontSize: 16, paddingInline: 10 }}
+                >
+                  Start Conversation Again
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <View>
+              <Text style={{ fontSize: 15, color: "#99A1AF" }}>
+                Start conversation to start chatting again!
+              </Text>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      )}
+    </>
   );
 }
 
@@ -256,7 +245,7 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   joinButton: {
-    width: 180,
+    width: 200,
     height: 40,
     backgroundColor: "#25A0E2",
     display: "flex",
