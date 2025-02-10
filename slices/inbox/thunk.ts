@@ -48,8 +48,6 @@ export const getSolvedChatMessages = createAsyncThunk(
     try {
       const response = await getSolvedChatMessagesApi(data);
 
-      console.log("SOLVED CHAT MESSAGES ->", response);
-
       return response.data;
     } catch (error) {
       console.log("Error while fetching chat messages", error);

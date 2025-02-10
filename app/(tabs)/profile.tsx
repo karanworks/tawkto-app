@@ -15,21 +15,22 @@ import { BriefcaseBusiness } from "~/lib/icons/BriefcaseBusiness";
 import { UsersRound } from "~/lib/icons/UsersRound";
 import { useRouter } from "expo-router";
 import { getItem } from "~/helper/storage";
+import useGetUser from "~/hooks/getUser";
+import { Button } from "~/components/ui/button";
 
 export default function Profile() {
-  const [user, setUser] = React.useState(null);
+  // const [user, setUser] = React.useState(null);
+  const user = useGetUser();
 
   const router = useRouter();
-  console.log("PROFILE PAGE RENDERED");
 
-  React.useEffect(() => {
-    async function loadUser() {
-      const storedUser = await getItem("user");
-      if (storedUser) setUser(storedUser);
-      console.log("GOT THE USER IN PROFILE ->", storedUser);
-    }
-    loadUser();
-  }, []);
+  // React.useEffect(() => {
+  //   async function loadUser() {
+  //     const storedUser = await getItem("user");
+  //     if (storedUser) setUser(storedUser);
+  //   }
+  //   loadUser();
+  // }, []);
 
   function handleNavigateToAccountSettings() {
     router.push("/accountSettings");
@@ -122,6 +123,42 @@ export default function Profile() {
                 </View>
               </TouchableOpacity>
             ))}
+            {/* <TouchableOpacity
+              activeOpacity={0.8}
+              style={{
+                width: "90%",
+                height: 40,
+                backgroundColor: "#fa0f2e",
+                alignSelf: "center",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 10,
+                // borderWidth: 1,
+                // borderColor: "#fa0f2e",
+              }}
+              onPress={() => console.log("LOGOUT PRESSSED")}
+            >
+              <View>
+                <Text style={{ color: "white", fontSize: 16 }}>Logout</Text>
+              </View>
+            </TouchableOpacity> */}
+
+            <View
+              style={{
+                width: "90%",
+                alignSelf: "center",
+                marginTop: 15,
+              }}
+            >
+              <Button
+                variant="outline"
+                style={{ borderColor: "#fa0f2e" }}
+                onPress={() => alert("Button Pressed")}
+              >
+                <Text style={{ color: "#fa0f2e" }}>Logout</Text>
+              </Button>
+            </View>
           </View>
         </CardContent>
         {/* <CardFooter className="flex-col gap-3 pb-0">

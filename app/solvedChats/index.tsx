@@ -35,32 +35,23 @@ import { ChatType, User } from "~/.expo/types/types";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
 import { getItem } from "~/helper/storage";
 import { getSolvedChats } from "~/slices/inbox/thunk";
+import useGetUser from "~/hooks/getUser";
 
 export default function SolvedChats() {
-  const [user, setUser] = React.useState<User | null>(null);
+  // const [user, setUser] = React.useState<User | null>(null);
+  const user = useGetUser();
 
-  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const { solvedChats } = useSelector((state: RootState) => state.Inbox);
 
-  console.log("SOLVED CHATS INSIDE THE PAGE ->", solvedChats);
-
-  React.useEffect(() => {
-    async function loadUser() {
-      const storedUser = await getItem("user");
-      if (storedUser) setUser(storedUser);
-    }
-    loadUser();
-  }, []);
-
-  React.useEffect(() => {
-    if (!user) return;
-
-    dispatch(
-      getSolvedChats({ workspaceId: user.workspace.id, agentId: user.id })
-    );
-  }, [user]);
+  // React.useEffect(() => {
+  //   async function loadUser() {
+  //     const storedUser = await getItem("user");
+  //     if (storedUser) setUser(storedUser);
+  //   }
+  //   loadUser();
+  // }, []);
 
   // function handleNavigateToChat() {
   //   router.push("/solvedChat");

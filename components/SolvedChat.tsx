@@ -42,8 +42,6 @@ function SolvedChat({ chat }: PropType) {
   const router = useRouter();
 
   function handleNavigateToChat(chatId: string) {
-    console.log("CHAT ID FOR SOLVED CHAT ->", chatId);
-
     dispatch(getSolvedChatMessages({ chatId }));
     router.push("/solvedChat");
   }

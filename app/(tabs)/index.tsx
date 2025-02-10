@@ -34,21 +34,23 @@ import { getItem } from "~/helper/storage";
 import { User, ChatType } from "../../.expo/types/types";
 import { useSelector } from "react-redux";
 import { RootState } from "../_layout";
+import useGetUser from "~/hooks/getUser";
 
 export default function Chats() {
-  const [user, setUser] = React.useState<User | null>(null);
+  // const [user, setUser] = React.useState<User | null>(null);
+  const user = useGetUser();
 
   const { chats } = useSelector((state: RootState) => state.Chats);
 
   const router = useRouter();
   const dispatch = useAppDispatch();
-  React.useEffect(() => {
-    async function loadUser() {
-      const storedUser = await getItem("user");
-      if (storedUser) setUser(storedUser);
-    }
-    loadUser();
-  }, []);
+  // React.useEffect(() => {
+  //   async function loadUser() {
+  //     const storedUser = await getItem("user");
+  //     if (storedUser) setUser(storedUser);
+  //   }
+  //   loadUser();
+  // }, []);
 
   React.useEffect(() => {
     if (!user) return;
@@ -62,10 +64,10 @@ export default function Chats() {
 
   return (
     <View className="flex-1 items-center  bg-secondary/30 px-3">
-      <View className="w-full" style={{ marginBlock: 10 }}>
+      {/* <View className="w-full" style={{ marginBlock: 10 }}>
         <Input placeholder="Search chat" />
         <Search style={{ position: "absolute", zIndex: 9999999 }} />
-      </View>
+      </View> */}
 
       {/* {chatsData?.map((chat) => (
         <Chat key={chat.id} chat={{ ...chat, handleNavigateToChat }} />

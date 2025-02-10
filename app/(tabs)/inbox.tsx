@@ -31,28 +31,35 @@ import { RootState } from "../_layout";
 import { ChatType, User } from "~/.expo/types/types";
 import { getItem } from "~/helper/storage";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
-import { getUnassignedChats } from "~/slices/inbox/thunk";
+import { getSolvedChats, getUnassignedChats } from "~/slices/inbox/thunk";
+import useGetUser from "~/hooks/getUser";
 
 export default function Inbox() {
-  const [user, setUser] = React.useState<User | null>(null);
+  // const [user, setUser] = React.useState<User | null>(null);
+  const user = useGetUser();
 
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { unassignedChats } = useSelector((state: RootState) => state.Inbox);
+  const { unassignedChats, solvedChats } = useSelector(
+    (state: RootState) => state.Inbox
+  );
 
-  React.useEffect(() => {
-    async function loadUser() {
-      const storedUser = await getItem("user");
-      if (storedUser) setUser(storedUser);
-    }
-    loadUser();
-  }, []);
+  // React.useEffect(() => {
+  //   async function loadUser() {
+  //     const storedUser = await getItem("user");
+  //     if (storedUser) setUser(storedUser);
+  //   }
+  //   loadUser();
+  // }, []);
 
   React.useEffect(() => {
     if (!user) return;
 
     dispatch(
       getUnassignedChats({ workspaceId: user.workspace.id, agentId: user.id })
+    );
+    dispatch(
+      getSolvedChats({ workspaceId: user.workspace.id, agentId: user.id })
     );
   }, [user]);
 
@@ -89,7 +96,9 @@ export default function Inbox() {
               <CardTitle style={{ fontSize: 16 }}>Unassigned</CardTitle>
             </CardHeader>
             <CardContent>
-              <Text style={{ fontSize: 20 }}>06</Text>
+              <Text style={{ fontSize: 20 }}>
+                {unassignedChats.length.toString().padStart(2, "0")}
+              </Text>
             </CardContent>
           </Pressable>
         </Card>
@@ -103,7 +112,9 @@ export default function Inbox() {
               <CardTitle style={{ fontSize: 16 }}>Solved</CardTitle>
             </CardHeader>
             <CardContent>
-              <Text style={{ fontSize: 20 }}>15</Text>
+              <Text style={{ fontSize: 20 }}>
+                {unassignedChats.length.toString().padStart(2, "0")}
+              </Text>
             </CardContent>
           </Pressable>
         </Card>
@@ -128,7 +139,7 @@ export default function Inbox() {
             {/* {chatsData.map((chat) => (
               <InboxChat key={chat.id} chat={chat} />
             ))} */}
-            {unassignedChats.map((chat: ChatType) => (
+            {solvedChats.map((chat: ChatType) => (
               <InboxChat key={chat.id} chat={chat} />
             ))}
           </View>

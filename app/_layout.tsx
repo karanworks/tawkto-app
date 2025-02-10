@@ -18,6 +18,7 @@ import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import rootReducer from "../slices";
+import useGetUser from "~/hooks/getUser";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -44,6 +45,9 @@ export default function RootLayout() {
   const hasMounted = React.useRef(false);
   const { colorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
+  const user = useGetUser();
+
+  console.log("GETTING LOGGED IN USER ->", user);
 
   useIsomorphicLayoutEffect(() => {
     if (hasMounted.current) {
