@@ -37,7 +37,7 @@ const chatsSlice = createSlice({
     builder.addCase(updateSolvedChat.fulfilled, (state, action) => {
       const response = action.payload;
       if (response.status === "success") {
-        state.solvedChats = response.data;
+        // DO SOMETHING
       }
     });
     builder.addCase(getSolvedChats.fulfilled, (state, action) => {
