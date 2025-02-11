@@ -37,6 +37,7 @@ interface TypingProp {
 function ChatMessaging() {
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState<{ [key: string]: boolean }>({});
+  const flatListRef = useRef<FlatList>(null);
 
   const colorScheme = useColorScheme();
   const iconColor = colorScheme === "dark" ? "#fff" : "#000";
@@ -70,6 +71,17 @@ function ChatMessaging() {
       socket.off("typing", handleTypingStatus);
     };
   }, []);
+
+  useEffect(() => {
+    socket.on("message", scrollToBottom);
+
+    return () => {
+      socket.off("message", scrollToBottom);
+    };
+  }, [activeChat]);
+  function scrollToBottom() {
+    flatListRef.current?.scrollToEnd({ animated: true });
+  }
 
   const handleSendMessage = () => {
     if (newMessage.trim().length === 0 || !user || !activeChat) return;
@@ -198,6 +210,7 @@ function ChatMessaging() {
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.messagesList}
             inverted={false}
+            ref={flatListRef}
             ListFooterComponent={
               isTyping[activeChat.visitor.id] ? (
                 <View className="flex flex-row items-center mt-2">
@@ -285,7 +298,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   messagesList: {
-    padding: 16,
+    paddingInline: 16,
+    paddingTop: 10,
   },
   messageContainer: {
     flexDirection: "row",
