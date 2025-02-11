@@ -15,6 +15,14 @@ import { ChatType, Messagetype } from "../../.expo/types/types";
 import { useSelector } from "react-redux";
 import { RootState } from "../_layout";
 import moment from "moment";
+import socket from "~/socket/socket";
+import useGetUser from "~/hooks/getUser";
+import { handleActiveChat } from "~/slices/chats/reducer";
+import { useAppDispatch } from "~/hooks/useAppDispatch";
+
+interface ItemPropType {
+  item: Messagetype;
+}
 
 function UnassignedChat() {
   const unassingedActiveChat = useSelector(
@@ -22,11 +30,30 @@ function UnassignedChat() {
   ) as ChatType | null;
 
   const router = useRouter();
+  const user = useGetUser();
+  const dispatch = useAppDispatch();
 
-  interface ItemPropType {
-    item: Messagetype;
+  function handleJoinConversation() {
+    if (!user || !unassingedActiveChat) {
+      return;
+    }
+
+    socket.emit("join-conversation", {
+      agentId: user.id,
+      visitorId: unassingedActiveChat.visitorId,
+      chatId: unassingedActiveChat.id,
+      workspaceId: user.workspace.id,
+    });
+
+    dispatch(handleActiveChat(unassingedActiveChat));
+    router.push("/chat");
+
+    // toast.success("Chat moved to open chats !", {
+    //   position: "bottom-center",
+    //   autoClose: 3000,
+    //   theme: "colored",
+    // });
   }
-
   const renderMessage: ListRenderItem<Messagetype> = ({
     item,
   }: ItemPropType) => (
@@ -108,9 +135,7 @@ function UnassignedChat() {
 
           <View style={styles.joinButtonContainer}>
             <TouchableOpacity
-              onPress={() => {
-                console.log("JOINED CHAT");
-              }}
+              onPress={handleJoinConversation}
               style={styles.joinButton}
             >
               <View>

@@ -18,10 +18,20 @@ import { useColorScheme } from "react-native";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import { RootState } from "../_layout";
+import socket from "~/socket/socket";
+import useGetUser from "~/hooks/getUser";
+import { useAppDispatch } from "~/hooks/useAppDispatch";
+import { handleIncomingMessageUpdate } from "~/slices/chats/reducer";
+
+interface ItemPropType {
+  item: Messagetype;
+}
 
 function ChatMessaging() {
   const colorScheme = useColorScheme();
   const iconColor = colorScheme === "dark" ? "#fff" : "#000";
+  const user = useGetUser();
+  const dispatch = useAppDispatch();
 
   const activeChat = useSelector(
     (state: RootState) => state.Chats.activeChat
@@ -46,26 +56,37 @@ function ChatMessaging() {
 
   const router = useRouter();
 
-  const sendMessage = () => {
-    if (newMessage.trim().length === 0) return;
+  const handleSendMessage = () => {
+    if (newMessage.trim().length === 0 || !user || !activeChat) return;
 
-    const message = {
-      id: Date.now().toString(),
-      text: newMessage,
-      sender: "me",
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      }),
-    };
+    socket.emit("message", {
+      message: { content: newMessage },
+      chatId: activeChat.id,
+      sender: {
+        name: user.name,
+        agentId: user.id,
+        type: "agent",
+      },
+      to: activeChat.visitorId,
+    });
 
-    setMessages([...messages, message]);
     setNewMessage("");
   };
 
-  interface ItemPropType {
-    item: Messagetype;
+  function handleTypingMessage(text: string) {
+    if (!user || !activeChat) return;
+
+    setNewMessage(text);
+    socket.emit("typing", {
+      user: {
+        name: user.name,
+        agentId: user.id,
+        visitorId: activeChat.visitor.id,
+        workspaceId: user.workspace.id,
+
+        type: "agent",
+      },
+    });
   }
 
   const renderMessage: ListRenderItem<Messagetype> = ({
@@ -156,13 +177,13 @@ function ChatMessaging() {
             <TextInput
               style={styles.input}
               value={newMessage}
-              onChangeText={setNewMessage}
+              onChangeText={handleTypingMessage}
               placeholder="Type a message..."
               multiline
             />
             <TouchableOpacity
               style={styles.sendButton}
-              onPress={sendMessage}
+              onPress={handleSendMessage}
               disabled={!newMessage.trim()}
             >
               <Ionicons

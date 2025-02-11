@@ -40,8 +40,6 @@ export default function Inbox() {
   }, [user]);
 
   function handleNavigateToUnassignedChats() {
-    console.log("UNASSIGNED FUNCTION BEING CALLED");
-
     router.push("/unassignedChats");
   }
   function handleNavigateToSolvedChats() {
@@ -89,7 +87,7 @@ export default function Inbox() {
             </CardHeader>
             <CardContent>
               <Text style={{ fontSize: 20 }}>
-                {unassignedChats.length.toString().padStart(2, "0")}
+                {solvedChats.length.toString().padStart(2, "0")}
               </Text>
             </CardContent>
           </Pressable>
@@ -111,7 +109,7 @@ export default function Inbox() {
             </Text>
           </View>
           <View>
-            {solvedChats.map((chat: ChatType) => (
+            {unassignedChats.slice(0, 5).map((chat: ChatType) => (
               <InboxChat key={chat.id} chat={chat} />
             ))}
           </View>
