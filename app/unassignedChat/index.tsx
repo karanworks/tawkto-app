@@ -4,13 +4,11 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   FlatList,
   ListRenderItem,
   TouchableOpacity,
   KeyboardAvoidingView,
 } from "react-native";
-import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { ChatType, Messagetype } from "../../.expo/types/types";
@@ -23,42 +21,7 @@ function UnassignedChat() {
     (state: RootState) => state.Inbox.unassingedActiveChat
   ) as ChatType | null;
 
-  const [messages, setMessages] = useState([
-    { id: "1", text: "Hello!", sender: "them", timestamp: "02:15 PM" },
-    {
-      id: "2",
-      text: "Hi there! How are you?",
-      sender: "me",
-      timestamp: "02:16 PM",
-    },
-    {
-      id: "3",
-      text: "I m doing great, thanks for asking!",
-      sender: "them",
-      timestamp: "02:17 PM",
-    },
-  ]);
-  const [newMessage, setNewMessage] = useState("");
-
   const router = useRouter();
-
-  const sendMessage = () => {
-    if (newMessage.trim().length === 0) return;
-
-    const message = {
-      id: Date.now().toString(),
-      text: newMessage,
-      sender: "me",
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      }),
-    };
-
-    setMessages([...messages, message]);
-    setNewMessage("");
-  };
 
   interface ItemPropType {
     item: Messagetype;
@@ -286,25 +249,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     borderRadius: 5,
   },
-  // inputContainer: {
-  //   flexDirection: "row",
-  //   padding: 16,
-  //   backgroundColor: "#FFFFFF",
-  //   borderTopWidth: 1,
-  //   borderTopColor: "#E5E5E5",
-  //   alignItems: "flex-end",
-  // },
-  // input: {
-  //   flex: 1,
-  //   backgroundColor: "#F5F5F5",
-  //   borderRadius: 5,
-  //   paddingHorizontal: 16,
-  //   paddingVertical: 14,
-  //   marginRight: 8,
-  //   maxHeight: 100,
-  //   fontSize: 16,
-  // },
-  // sendButton: {
-  //   padding: 8,
-  // },
 });

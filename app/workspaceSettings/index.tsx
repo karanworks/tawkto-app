@@ -1,10 +1,4 @@
-import {
-  Button,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import {
   Card,
   CardContent,

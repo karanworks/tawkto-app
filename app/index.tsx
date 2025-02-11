@@ -11,13 +11,12 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 const logoLight = require("../assets/images/logo-light.png");
-import { Link, useNavigation, useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { Label } from "~/components/ui/label";
-import { useSelector } from "react-redux";
 import { login } from "../slices/login/thunk";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
 
-export default function Screen() {
+export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const dispatch = useAppDispatch();

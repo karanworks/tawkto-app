@@ -1,13 +1,6 @@
 import * as React from "react";
 import { Pressable, View } from "react-native";
-import Animated, {
-  FadeInUp,
-  FadeOutDown,
-  LayoutAnimationConfig,
-} from "react-native-reanimated";
-import { Info } from "~/lib/icons/Info";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { Button } from "~/components/ui/button";
+
 import {
   Card,
   CardContent,
@@ -16,26 +9,17 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Progress } from "~/components/ui/progress";
 import { Text } from "~/components/ui/text";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
-import { chatsData } from "~/common/chatData";
 import InboxChat from "~/components/InboxChat";
 import { useRouter } from "expo-router";
 import { useSelector } from "react-redux";
 import { RootState } from "../_layout";
-import { ChatType, User } from "~/.expo/types/types";
-import { getItem } from "~/helper/storage";
+import { ChatType } from "~/.expo/types/types";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
 import { getSolvedChats, getUnassignedChats } from "~/slices/inbox/thunk";
 import useGetUser from "~/hooks/getUser";
 
 export default function Inbox() {
-  // const [user, setUser] = React.useState<User | null>(null);
   const user = useGetUser();
 
   const router = useRouter();
@@ -43,14 +27,6 @@ export default function Inbox() {
   const { unassignedChats, solvedChats } = useSelector(
     (state: RootState) => state.Inbox
   );
-
-  // React.useEffect(() => {
-  //   async function loadUser() {
-  //     const storedUser = await getItem("user");
-  //     if (storedUser) setUser(storedUser);
-  //   }
-  //   loadUser();
-  // }, []);
 
   React.useEffect(() => {
     if (!user) return;
@@ -129,16 +105,12 @@ export default function Inbox() {
                 fontSize: 18,
                 fontWeight: "bold",
                 marginBottom: 5,
-                // color: "#3b3b3b",
               }}
             >
               Latest Unassigned Messages
             </Text>
           </View>
           <View>
-            {/* {chatsData.map((chat) => (
-              <InboxChat key={chat.id} chat={chat} />
-            ))} */}
             {solvedChats.map((chat: ChatType) => (
               <InboxChat key={chat.id} chat={chat} />
             ))}

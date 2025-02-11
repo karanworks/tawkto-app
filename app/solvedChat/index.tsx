@@ -4,13 +4,11 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   FlatList,
   ListRenderItem,
   TouchableOpacity,
   KeyboardAvoidingView,
 } from "react-native";
-import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { ChatType, Messagetype } from "../../.expo/types/types";
@@ -19,7 +17,6 @@ import { useSelector } from "react-redux";
 import moment from "moment";
 
 function SolvedChat() {
-  // const { solvedActiveChat } = useSelector((state: RootState) => state.Inbox);
   const solvedActiveChat = useSelector(
     (state: RootState) => state.Inbox.solvedActiveChat
   ) as ChatType | null;
@@ -236,7 +233,6 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
   },
   joinButtonContainer: {
-    // backgroundColor: "red",
     display: "flex",
     alignItems: "center",
     paddingBlock: 18,
@@ -254,25 +250,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     borderRadius: 5,
   },
-  // inputContainer: {
-  //   flexDirection: "row",
-  //   padding: 16,
-  //   backgroundColor: "#FFFFFF",
-  //   borderTopWidth: 1,
-  //   borderTopColor: "#E5E5E5",
-  //   alignItems: "flex-end",
-  // },
-  // input: {
-  //   flex: 1,
-  //   backgroundColor: "#F5F5F5",
-  //   borderRadius: 5,
-  //   paddingHorizontal: 16,
-  //   paddingVertical: 14,
-  //   marginRight: 8,
-  //   maxHeight: 100,
-  //   fontSize: 16,
-  // },
-  // sendButton: {
-  //   padding: 8,
-  // },
 });

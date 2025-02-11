@@ -1,56 +1,20 @@
 import * as React from "react";
 import { View } from "react-native";
-import Animated, {
-  FadeInUp,
-  FadeOutDown,
-  LayoutAnimationConfig,
-} from "react-native-reanimated";
-import { Info } from "~/lib/icons/Info";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
-import { Progress } from "~/components/ui/progress";
-import { Text } from "~/components/ui/text";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
-import { chatsData } from "~/common/chatData";
 import Chat from "~/components/Chat";
-import { Input } from "~/components/ui/input";
-import { Search } from "~/lib/icons/Search";
-import { useRouter } from "expo-router";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
 import { getChats } from "~/slices/chats/thunk";
-import { getItem } from "~/helper/storage";
-import { User, ChatType } from "../../.expo/types/types";
+import { ChatType } from "../../.expo/types/types";
 import { useSelector } from "react-redux";
 import { RootState } from "../_layout";
 import useGetUser from "~/hooks/getUser";
+import socket from "~/socket/socket";
 
 export default function Chats() {
-  // const [user, setUser] = React.useState<User | null>(null);
   const user = useGetUser();
 
   const { chats } = useSelector((state: RootState) => state.Chats);
 
-  const router = useRouter();
   const dispatch = useAppDispatch();
-  // React.useEffect(() => {
-  //   async function loadUser() {
-  //     const storedUser = await getItem("user");
-  //     if (storedUser) setUser(storedUser);
-  //   }
-  //   loadUser();
-  // }, []);
 
   React.useEffect(() => {
     if (!user) return;
@@ -58,20 +22,17 @@ export default function Chats() {
     dispatch(getChats({ workspaceId: user.workspace.id, agentId: user.id }));
   }, [user]);
 
-  function handleNavigateToChat() {
-    router.push("/chat");
-  }
+  React.useEffect(() => {
+    if (user) {
+      socket.emit("agent-join", {
+        agentId: user?.id,
+        workspaceId: user.workspace?.id,
+      });
+    }
+  }, [user]);
 
   return (
     <View className="flex-1 items-center  bg-secondary/30 px-3">
-      {/* <View className="w-full" style={{ marginBlock: 10 }}>
-        <Input placeholder="Search chat" />
-        <Search style={{ position: "absolute", zIndex: 9999999 }} />
-      </View> */}
-
-      {/* {chatsData?.map((chat) => (
-        <Chat key={chat.id} chat={{ ...chat, handleNavigateToChat }} />
-      ))} */}
       {chats?.map((chat: ChatType) => (
         <Chat key={chat.id} chat={{ ...chat }} />
       ))}

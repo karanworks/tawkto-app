@@ -14,16 +14,10 @@ import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { ChatType, Messagetype } from "../../.expo/types/types";
-import { useColorScheme } from "react-native"; // Import this
+import { useColorScheme } from "react-native";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import { RootState } from "../_layout";
-// interface MessageType {
-//   id: string;
-//   text: string;
-//   sender: string;
-//   timestamp: string;
-// }
 
 function ChatMessaging() {
   const colorScheme = useColorScheme();
@@ -77,43 +71,6 @@ function ChatMessaging() {
   const renderMessage: ListRenderItem<Messagetype> = ({
     item: message,
   }: ItemPropType) => (
-    // <View
-    //   style={[
-    //     styles.messageContainer,
-    //     item.sender === "me" ? styles.myMessage : styles.theirMessage,
-    //   ]}
-    // >
-    //   {item.sender === "them" && (
-    //     <View style={styles.avatar}>
-    //       <Text style={styles.avatarText}>C</Text>
-    //     </View>
-    //   )}
-    //   <View\
-    //     style={[
-    //       styles.messageBubble,
-    //       item.sender === "me" ? styles.myBubble : styles.theirBubble,
-    //     ]}
-    //   >
-    //     <Text
-    //       style={[
-    //         styles.messageText,
-    //         item.sender === "me"
-    //           ? styles.myMessageText
-    //           : styles.theirMessageText,
-    //       ]}
-    //     >
-    //       {item.text}
-    //     </Text>
-    //     <Text
-    //       style={[
-    //         styles.timestamp,
-    //         item.sender === "me" ? styles.myTimestamp : styles.theirTimestamp,
-    //       ]}
-    //     >
-    //       {item.timestamp}
-    //     </Text>
-    //   </View>
-    // </View>
     <View
       style={[
         styles.messageContainer,
@@ -161,60 +118,62 @@ function ChatMessaging() {
 
   return (
     <>
-    {activeChat && <KeyboardAvoidingView
-      className="bg-background"
-      style={{ ...styles.container }}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
-    >
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="chevron-back" size={24} color={iconColor} />
-        </TouchableOpacity>
-
-        <View className="flex flex-row gap-2">
-          <View style={styles.headerAvatar}>
-            <Text style={styles.headerAvatarText}>C</Text>
-          </View>
-
-          <View>
-            <Text className="text-primary" style={styles.headerTitle}>
-              {activeChat.visitor.name}
-            </Text>
-            <Text className="text-primary text-sm">Online</Text>
-          </View>
-        </View>
-      </View>
-
-      <FlatList
-        data={activeChat.messages}
-        renderItem={renderMessage}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.messagesList}
-        inverted={false}
-      />
-
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={newMessage}
-          onChangeText={setNewMessage}
-          placeholder="Type a message..."
-          multiline
-        />
-        <TouchableOpacity
-          style={styles.sendButton}
-          onPress={sendMessage}
-          disabled={!newMessage.trim()}
+      {activeChat && (
+        <KeyboardAvoidingView
+          className="bg-background"
+          style={{ ...styles.container }}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
         >
-          <Ionicons
-            name="send"
-            size={24}
-            color={newMessage.trim() ? "#00A7E1" : "#666"}
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="chevron-back" size={24} color={iconColor} />
+            </TouchableOpacity>
+
+            <View className="flex flex-row gap-2">
+              <View style={styles.headerAvatar}>
+                <Text style={styles.headerAvatarText}>C</Text>
+              </View>
+
+              <View>
+                <Text className="text-primary" style={styles.headerTitle}>
+                  {activeChat.visitor.name}
+                </Text>
+                <Text className="text-primary text-sm">Online</Text>
+              </View>
+            </View>
+          </View>
+
+          <FlatList
+            data={activeChat.messages}
+            renderItem={renderMessage}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.messagesList}
+            inverted={false}
           />
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>}
+
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              value={newMessage}
+              onChangeText={setNewMessage}
+              placeholder="Type a message..."
+              multiline
+            />
+            <TouchableOpacity
+              style={styles.sendButton}
+              onPress={sendMessage}
+              disabled={!newMessage.trim()}
+            >
+              <Ionicons
+                name="send"
+                size={24}
+                color={newMessage.trim() ? "#00A7E1" : "#666"}
+              />
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      )}
     </>
   );
 }
@@ -224,7 +183,6 @@ export default ChatMessaging;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "#FFFFFF",
   },
   header: {
     flexDirection: "row",
@@ -234,7 +192,6 @@ const styles = StyleSheet.create({
       Platform.OS === "android" && StatusBar.currentHeight
         ? StatusBar.currentHeight + 16
         : 16,
-    // backgroundColor: "#FFFFFF",
     borderBottomWidth: 1,
     borderBottomColor: "#E5E5E5",
   },
@@ -321,7 +278,6 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     padding: 16,
-    // backgroundColor: "#FFFFFF",
     borderTopWidth: 1,
     borderTopColor: "#E5E5E5",
     alignItems: "flex-end",

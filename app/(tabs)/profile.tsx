@@ -4,7 +4,6 @@ import {
   View,
   Platform,
   StatusBar,
-  Pressable,
   TouchableOpacity,
 } from "react-native";
 import { Card, CardContent } from "~/components/ui/card";
@@ -14,29 +13,22 @@ import { ChevronRight } from "~/lib/icons/ChevronRight";
 import { BriefcaseBusiness } from "~/lib/icons/BriefcaseBusiness";
 import { UsersRound } from "~/lib/icons/UsersRound";
 import { useRouter } from "expo-router";
-import { getItem } from "~/helper/storage";
-import useGetUser from "~/hooks/getUser";
+import { removeItem } from "~/helper/storage";
 import { Button } from "~/components/ui/button";
 
 export default function Profile() {
-  // const [user, setUser] = React.useState(null);
-  const user = useGetUser();
-
   const router = useRouter();
-
-  // React.useEffect(() => {
-  //   async function loadUser() {
-  //     const storedUser = await getItem("user");
-  //     if (storedUser) setUser(storedUser);
-  //   }
-  //   loadUser();
-  // }, []);
 
   function handleNavigateToAccountSettings() {
     router.push("/accountSettings");
   }
   function handleNavigateToWorkspaceSettings() {
     router.push("/workspaceSettings");
+  }
+
+  async function handleLogout() {
+    await removeItem("user");
+    //TODO: REDIRECTING TO LOGIN PAGE AFTER LOGOUT
   }
 
   const settings = [
@@ -73,17 +65,6 @@ export default function Profile() {
       </View>
 
       <Card className="w-full rounded-2xl">
-        {/* <CardHeader>
-          
-          <View className="p-3" />
-          <CardTitle className="pb-2">Profile Settings</CardTitle>
-          <View className="flex-row">
-            <CardDescription className="text-base font-semibold">
-              Scientist
-            </CardDescription>
-            
-          </View>
-        </CardHeader> */}
         <CardContent className="p-4">
           <View>
             {settings?.map((setting, index) => (
@@ -123,26 +104,6 @@ export default function Profile() {
                 </View>
               </TouchableOpacity>
             ))}
-            {/* <TouchableOpacity
-              activeOpacity={0.8}
-              style={{
-                width: "90%",
-                height: 40,
-                backgroundColor: "#fa0f2e",
-                alignSelf: "center",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 10,
-                // borderWidth: 1,
-                // borderColor: "#fa0f2e",
-              }}
-              onPress={() => console.log("LOGOUT PRESSSED")}
-            >
-              <View>
-                <Text style={{ color: "white", fontSize: 16 }}>Logout</Text>
-              </View>
-            </TouchableOpacity> */}
 
             <View
               style={{
@@ -154,43 +115,13 @@ export default function Profile() {
               <Button
                 variant="outline"
                 style={{ borderColor: "#fa0f2e" }}
-                onPress={() => alert("Button Pressed")}
+                onPress={handleLogout}
               >
                 <Text style={{ color: "#fa0f2e" }}>Logout</Text>
               </Button>
             </View>
           </View>
         </CardContent>
-        {/* <CardFooter className="flex-col gap-3 pb-0">
-          <View className="flex-row items-center overflow-hidden">
-            <Text className="text-sm text-muted-foreground">Productivity:</Text>
-            <LayoutAnimationConfig skipEntering>
-              <Animated.View
-                key={progress}
-                entering={FadeInUp}
-                exiting={FadeOutDown}
-                className="w-11 items-center"
-              >
-                <Text className="text-sm font-bold text-sky-600">
-                  {progress}%
-                </Text>
-              </Animated.View>
-            </LayoutAnimationConfig>
-          </View>
-          <Progress
-            value={progress}
-            className="h-2"
-            indicatorClassName="bg-sky-600"
-          />
-          <View />
-          <Button
-            variant="outline"
-            className="shadow shadow-foreground/5"
-            onPress={updateProgressValue}
-          >
-            <Text>Update</Text>
-          </Button>
-        </CardFooter> */}
       </Card>
     </View>
   );

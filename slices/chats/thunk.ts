@@ -20,7 +20,6 @@ export const getChatMessages = createAsyncThunk(
   async (data: any) => {
     try {
       const response = await getChatMessagesApi(data);
-      console.log("GOT THE CHAT MESSAGES IN THUNK", response);
       return response.data;
     } catch (error) {
       console.log("Error while fetching chat messages", error);

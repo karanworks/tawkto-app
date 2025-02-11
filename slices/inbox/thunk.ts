@@ -34,7 +34,6 @@ export const getSolvedChats = createAsyncThunk(
   async (data: any) => {
     try {
       const response = await getSolvedChatsApi(data);
-      console.log(" GOT SOLVED CHATS ->", response);
 
       return response.data;
     } catch (error) {
