@@ -10,7 +10,7 @@ import {
   KeyboardAvoidingView,
   ListRenderItem,
 } from "react-native";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { ChatType, Messagetype } from "../../.expo/types/types";
@@ -24,13 +24,19 @@ import { useAppDispatch } from "~/hooks/useAppDispatch";
 import { SquareCheckBig } from "~/lib/icons/SquareCheckBig";
 import { handleIncomingMessageUpdate } from "~/slices/chats/reducer";
 import { updateSolvedChat } from "~/slices/inbox/thunk";
+import TypingAnimation from "./TypingAnimation";
 
 interface ItemPropType {
   item: Messagetype;
 }
 
+interface TypingProp {
+  id: string;
+}
+
 function ChatMessaging() {
   const [newMessage, setNewMessage] = useState("");
+  const [isTyping, setIsTyping] = useState<{ [key: string]: boolean }>({});
 
   const colorScheme = useColorScheme();
   const iconColor = colorScheme === "dark" ? "#fff" : "#000";
@@ -42,6 +48,28 @@ function ChatMessaging() {
   ) as ChatType | null;
 
   const router = useRouter();
+
+  function handleTypingStatus({ id: userId }: TypingProp) {
+    setIsTyping((prevStatus) => ({
+      ...prevStatus,
+      [userId]: true,
+    }));
+
+    setTimeout(() => {
+      setIsTyping((prevStatus) => ({
+        ...prevStatus,
+        [userId]: false,
+      }));
+    }, 2000);
+  }
+
+  useEffect(() => {
+    socket.on("typing", handleTypingStatus);
+
+    return () => {
+      socket.off("typing", handleTypingStatus);
+    };
+  }, []);
 
   const handleSendMessage = () => {
     if (newMessage.trim().length === 0 || !user || !activeChat) return;
@@ -87,12 +115,12 @@ function ChatMessaging() {
     <View
       style={[
         styles.messageContainer,
-        message.sender.type === "visitor"
+        message.sender.type === "agent"
           ? styles.myMessage
           : styles.theirMessage,
       ]}
     >
-      {message.sender.type === "agent" && (
+      {message.sender.type === "visitor" && (
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>C</Text>
         </View>
@@ -100,7 +128,7 @@ function ChatMessaging() {
       <View
         style={[
           styles.messageBubble,
-          message.sender.type === "visitor"
+          message.sender.type === "agent"
             ? styles.myBubble
             : styles.theirBubble,
         ]}
@@ -108,7 +136,7 @@ function ChatMessaging() {
         <Text
           style={[
             styles.messageText,
-            message.sender.type === "visitor"
+            message.sender.type === "agent"
               ? styles.myMessageText
               : styles.theirMessageText,
           ]}
@@ -118,7 +146,7 @@ function ChatMessaging() {
         <Text
           style={[
             styles.timestamp,
-            message.sender.type === "visitor"
+            message.sender.type === "agent"
               ? styles.myTimestamp
               : styles.theirTimestamp,
           ]}
@@ -170,7 +198,29 @@ function ChatMessaging() {
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.messagesList}
             inverted={false}
+            ListFooterComponent={
+              isTyping[activeChat.visitor.id] ? (
+                <View className="flex flex-row items-center mt-2">
+                  <View style={styles.avatar}>
+                    <Text style={styles.avatarText}>C</Text>
+                  </View>
+                  <TypingAnimation />
+                </View>
+              ) : null
+            }
           />
+
+          {/* {isTyping && (
+            <View className="flex flex-row items-center gap-2 mb-3">
+              <View style={styles.headerAvatar}>
+                <Text style={styles.headerAvatarText}>C</Text>
+              </View>
+
+              <View>
+                <TypingAnimation />
+              </View>
+            </View>
+          )} */}
 
           <View style={styles.inputContainer}>
             <TextInput

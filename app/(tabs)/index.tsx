@@ -18,6 +18,8 @@ export default function Chats() {
 
   const dispatch = useAppDispatch();
 
+  console.log("CHATS PAGE RENDERED");
+
   useEffect(() => {
     if (!user) return;
 

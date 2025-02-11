@@ -33,10 +33,10 @@ function SolvedChat() {
     <View
       style={[
         styles.messageContainer,
-        item.sender.type === "visitor" ? styles.myMessage : styles.theirMessage,
+        item.sender.type === "agent" ? styles.myMessage : styles.theirMessage,
       ]}
     >
-      {item.sender.type === "agent" && (
+      {item.sender.type === "visitor" && (
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>C</Text>
         </View>
@@ -44,13 +44,13 @@ function SolvedChat() {
       <View
         style={[
           styles.messageBubble,
-          item.sender.type === "visitor" ? styles.myBubble : styles.theirBubble,
+          item.sender.type === "agent" ? styles.myBubble : styles.theirBubble,
         ]}
       >
         <Text
           style={[
             styles.messageText,
-            item.sender.type === "visitor"
+            item.sender.type === "agent"
               ? styles.myMessageText
               : styles.theirMessageText,
           ]}
@@ -60,7 +60,7 @@ function SolvedChat() {
         <Text
           style={[
             styles.timestamp,
-            item.sender.type === "visitor"
+            item.sender.type === "agent"
               ? styles.myTimestamp
               : styles.theirTimestamp,
           ]}
