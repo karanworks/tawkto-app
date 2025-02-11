@@ -4,6 +4,7 @@ import {
   getUnassignedChatMessages as getUnassignedChatMessagesApi,
   getSolvedChats as getSolvedChatsApi,
   getSolvedChatMessages as getSolvedChatMessagesApi,
+  updateSolvedChat as updateSolvedChatApi,
 } from "~/helper/backend_helper";
 
 export const getUnassignedChats = createAsyncThunk(
@@ -26,6 +27,18 @@ export const getUnassignedChatMessages = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log("Error while fetching chat messages", error);
+    }
+  }
+);
+export const updateSolvedChat = createAsyncThunk(
+  "inbox/updateSolvedChat",
+  async (data: any) => {
+    try {
+      const response = await updateSolvedChatApi(data);
+
+      return response.data;
+    } catch (error) {
+      console.log("Error while updating solved chat", error);
     }
   }
 );

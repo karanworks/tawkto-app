@@ -46,6 +46,8 @@ export default function Inbox() {
     router.push("/solvedChats");
   }
 
+  console.log("SOLVED CHATS ->", solvedChats);
+
   return (
     <View className="flex-1 gap-5 p-6 bg-secondary/30">
       <View>

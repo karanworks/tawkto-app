@@ -21,13 +21,17 @@ import { RootState } from "../_layout";
 import socket from "~/socket/socket";
 import useGetUser from "~/hooks/getUser";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
+import { SquareCheckBig } from "~/lib/icons/SquareCheckBig";
 import { handleIncomingMessageUpdate } from "~/slices/chats/reducer";
+import { updateSolvedChat } from "~/slices/inbox/thunk";
 
 interface ItemPropType {
   item: Messagetype;
 }
 
 function ChatMessaging() {
+  const [newMessage, setNewMessage] = useState("");
+
   const colorScheme = useColorScheme();
   const iconColor = colorScheme === "dark" ? "#fff" : "#000";
   const user = useGetUser();
@@ -36,23 +40,6 @@ function ChatMessaging() {
   const activeChat = useSelector(
     (state: RootState) => state.Chats.activeChat
   ) as ChatType | null;
-
-  const [messages, setMessages] = useState([
-    { id: "1", text: "Hello!", sender: "them", timestamp: "02:15 PM" },
-    {
-      id: "2",
-      text: "Hi there! How are you?",
-      sender: "me",
-      timestamp: "02:16 PM",
-    },
-    {
-      id: "3",
-      text: "I m doing great, thanks for asking!",
-      sender: "them",
-      timestamp: "02:17 PM",
-    },
-  ]);
-  const [newMessage, setNewMessage] = useState("");
 
   const router = useRouter();
 
@@ -87,6 +74,11 @@ function ChatMessaging() {
         type: "agent",
       },
     });
+  }
+
+  function handleSolveMessage(chatId: string) {
+    dispatch(updateSolvedChat({ chatId, status: "solved" }));
+    router.push("/(tabs)");
   }
 
   const renderMessage: ListRenderItem<Messagetype> = ({
@@ -151,17 +143,24 @@ function ChatMessaging() {
               <Ionicons name="chevron-back" size={24} color={iconColor} />
             </TouchableOpacity>
 
-            <View className="flex flex-row gap-2">
-              <View style={styles.headerAvatar}>
-                <Text style={styles.headerAvatarText}>C</Text>
-              </View>
+            <View className="w-full flex flex-row justify-between items-center pr-7">
+              <View className="flex flex-row gap-2">
+                <View style={styles.headerAvatar}>
+                  <Text style={styles.headerAvatarText}>C</Text>
+                </View>
 
-              <View>
-                <Text className="text-primary" style={styles.headerTitle}>
-                  {activeChat.visitor.name}
-                </Text>
-                <Text className="text-primary text-sm">Online</Text>
+                <View>
+                  <Text className="text-primary" style={styles.headerTitle}>
+                    {activeChat.visitor.name}
+                  </Text>
+                  <Text className="text-primary text-sm">Online</Text>
+                </View>
               </View>
+              <TouchableOpacity
+                onPress={() => handleSolveMessage(activeChat.id)}
+              >
+                <SquareCheckBig size={30} strokeWidth={2} color="#00a62f" />
+              </TouchableOpacity>
             </View>
           </View>
 

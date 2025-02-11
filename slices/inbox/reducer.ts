@@ -4,6 +4,7 @@ import {
   getUnassignedChatMessages,
   getSolvedChats,
   getSolvedChatMessages,
+  updateSolvedChat,
 } from "./thunk";
 
 const initialState = {
@@ -31,6 +32,12 @@ const chatsSlice = createSlice({
       const response = action.payload;
       if (response.status === "success") {
         state.unassingedActiveChat = response.data;
+      }
+    });
+    builder.addCase(updateSolvedChat.fulfilled, (state, action) => {
+      const response = action.payload;
+      if (response.status === "success") {
+        state.solvedChats = response.data;
       }
     });
     builder.addCase(getSolvedChats.fulfilled, (state, action) => {

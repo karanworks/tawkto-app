@@ -44,3 +44,9 @@ export function getSolvedChats({ workspaceId, agentId }: any) {
 export function getSolvedChatMessages({ chatId }: any) {
   return api.get(`${process.env.EXPO_PUBLIC_SERVER_URL}/solved/${chatId}`);
 }
+
+export function updateSolvedChat({ chatId, status }: any) {
+  return api.patch(`${process.env.EXPO_PUBLIC_SERVER_URL}/solved/${chatId}`, {
+    status,
+  });
+}
