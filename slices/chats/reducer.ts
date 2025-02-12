@@ -22,6 +22,10 @@ const chatsSlice = createSlice({
       state.activeChat = action.payload;
     },
 
+    handleAddChat(state, action) {
+      state.chats = [action.payload, ...state.chats];
+    },
+
     handleIncomingMessageUpdate(state, action) {
       const newMessage = action.payload;
 
@@ -60,6 +64,6 @@ const chatsSlice = createSlice({
   },
 });
 
-export const { handleIncomingMessageUpdate, handleActiveChat } =
+export const { handleIncomingMessageUpdate, handleActiveChat, handleAddChat } =
   chatsSlice.actions;
 export default chatsSlice.reducer;

@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { View } from "react-native";
+import { useCallback, useEffect } from "react";
+import { FlatList, View } from "react-native";
 import Chat from "~/components/Chat";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
 import { getChats } from "~/slices/chats/thunk";
@@ -10,6 +10,7 @@ import useGetUser from "~/hooks/getUser";
 import socket from "~/socket/socket";
 import { getUnassignedChats } from "~/slices/inbox/thunk";
 import { handleIncomingMessageUpdate } from "~/slices/chats/reducer";
+import { useFocusEffect } from "expo-router";
 
 export default function Chats() {
   const user = useGetUser();
@@ -18,21 +19,10 @@ export default function Chats() {
 
   const dispatch = useAppDispatch();
 
-  console.log("CHATS PAGE RENDERED");
-
   useEffect(() => {
     if (!user) return;
 
     dispatch(getChats({ workspaceId: user.workspace.id, agentId: user.id }));
-  }, [user]);
-
-  useEffect(() => {
-    if (user) {
-      socket.emit("agent-join", {
-        agentId: user?.id,
-        workspaceId: user.workspace?.id,
-      });
-    }
   }, [user]);
 
   useEffect(() => {
@@ -77,10 +67,34 @@ export default function Chats() {
   }, [activeChat]);
 
   return (
-    <View className="flex-1 items-center  bg-secondary/30 px-3">
-      {chats?.map((chat: ChatType) => (
+    <View
+      className="flex-1 items-center  bg-secondary/30 px-3"
+      style={{ height: "200%" }}
+    >
+      {/* {chats?.map((chat: ChatType) => (
         <Chat key={chat.id} chat={{ ...chat }} />
-      ))}
+      ))} */}
+      <FlatList
+        data={chats}
+        keyExtractor={(chat: ChatType) => chat.id.toString()}
+        renderItem={({ item }) => <Chat chat={{ ...item }} />}
+        contentContainerStyle={{ paddingBottom: 90 }}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 }
+
+// return (
+//   <View className="flex-1 items-center  bg-secondary/30 px-3">
+//     {/* {chats?.map((chat: ChatType) => (
+//       <Chat key={chat.id} chat={{ ...chat }} />
+//     ))} */}
+//     <FlatList
+//       data={chats}
+//       keyExtractor={(chat: ChatType) => chat.id.toString()}
+//       renderItem={({ item }) => <Chat chat={{ ...item }} />}
+//       contentContainerStyle={{ paddingBottom: 20 }} // Add space at the bottom
+//     />
+//   </View>
+// );

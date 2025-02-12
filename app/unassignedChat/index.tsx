@@ -17,7 +17,7 @@ import { RootState } from "../_layout";
 import moment from "moment";
 import socket from "~/socket/socket";
 import useGetUser from "~/hooks/getUser";
-import { handleActiveChat } from "~/slices/chats/reducer";
+import { handleActiveChat, handleAddChat } from "~/slices/chats/reducer";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
 
 interface ItemPropType {
@@ -45,8 +45,9 @@ function UnassignedChat() {
       workspaceId: user.workspace.id,
     });
 
-    dispatch(handleActiveChat(unassingedActiveChat))
-      router.push("/chat");
+    dispatch(handleActiveChat(unassingedActiveChat));
+    dispatch(handleAddChat(unassingedActiveChat));
+    router.push("/chat");
 
     // toast.success("Chat moved to open chats !", {
     //   position: "bottom-center",
