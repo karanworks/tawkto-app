@@ -28,6 +28,7 @@ export default function Profile() {
 
   async function handleLogout() {
     await removeItem("user");
+    router.navigate("/login");
     //TODO: REDIRECTING TO LOGIN PAGE AFTER LOGOUT
   }
 
