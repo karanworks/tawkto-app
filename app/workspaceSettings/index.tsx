@@ -10,8 +10,24 @@ import {
 import { Input } from "~/components/ui/input";
 import { Text } from "~/components/ui/text";
 import { Label } from "~/components/ui/label";
+import useGetUser from "~/hooks/getUser";
+import { useEffect, useState } from "react";
 
 function WorkspaceSettings() {
+  const user = useGetUser();
+  const [workspaceName, setWorkspaceName] = useState(
+    user?.workspace?.name || ""
+  );
+
+  useEffect(() => {
+    if (user?.workspace?.name) {
+      setWorkspaceName(user.workspace.name);
+    }
+  }, [user?.workspace?.name]);
+
+  function handleWorkspaceName(text: string) {
+    setWorkspaceName(text);
+  }
   return (
     <View style={styles.cardContainer}>
       <Card className="w-full max-w-sm" style={styles.updateDetailsCard}>
@@ -26,7 +42,8 @@ function WorkspaceSettings() {
             <Label nativeID="workspaceName">Workspace Name</Label>
             <Input
               aria-aria-labelledby="workspaceName"
-              defaultValue="Your workspace"
+              onChangeText={handleWorkspaceName}
+              value={workspaceName}
             />
           </View>
         </CardContent>
