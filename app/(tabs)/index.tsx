@@ -84,17 +84,3 @@ export default function Chats() {
     </View>
   );
 }
-
-// return (
-//   <View className="flex-1 items-center  bg-secondary/30 px-3">
-//     {/* {chats?.map((chat: ChatType) => (
-//       <Chat key={chat.id} chat={{ ...chat }} />
-//     ))} */}
-//     <FlatList
-//       data={chats}
-//       keyExtractor={(chat: ChatType) => chat.id.toString()}
-//       renderItem={({ item }) => <Chat chat={{ ...item }} />}
-//       contentContainerStyle={{ paddingBottom: 20 }} // Add space at the bottom
-//     />
-//   </View>
-// );
