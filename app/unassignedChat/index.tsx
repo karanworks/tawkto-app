@@ -45,8 +45,8 @@ function UnassignedChat() {
       workspaceId: user.workspace.id,
     });
 
-    dispatch(handleActiveChat(unassingedActiveChat));
-    router.push("/chat");
+    dispatch(handleActiveChat(unassingedActiveChat))
+      router.push("/chat");
 
     // toast.success("Chat moved to open chats !", {
     //   position: "bottom-center",

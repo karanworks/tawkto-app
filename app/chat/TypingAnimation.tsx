@@ -13,13 +13,13 @@ export default function TypingAnimation() {
         Animated.sequence([
           Animated.delay(delay),
           Animated.timing(dot, {
-            toValue: -3, // Moves up
+            toValue: -3, 
             duration: 600,
             easing: Easing.inOut(Easing.ease),
             useNativeDriver: true,
           }),
           Animated.timing(dot, {
-            toValue: 0, // Moves back down
+            toValue: 0, 
             duration: 600,
             easing: Easing.inOut(Easing.ease),
             useNativeDriver: true,

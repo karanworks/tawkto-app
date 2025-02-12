@@ -35,6 +35,7 @@ export const updateSolvedChat = createAsyncThunk(
   async (data: any) => {
     try {
       const response = await updateSolvedChatApi(data);
+      console.log("GETTING THE DATA AFTER UPDATING THE CHAT ->", data);
 
       return response.data;
     } catch (error) {

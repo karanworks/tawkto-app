@@ -15,6 +15,13 @@ import { ChatType, Messagetype } from "../../.expo/types/types";
 import { RootState } from "../_layout";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import { useAppDispatch } from "~/hooks/useAppDispatch";
+import { updateSolvedChat } from "~/slices/inbox/thunk";
+import { handleActiveChat } from "~/slices/chats/reducer";
+
+interface ItemPropType {
+  item: Messagetype;
+}
 
 function SolvedChat() {
   const solvedActiveChat = useSelector(
@@ -22,9 +29,18 @@ function SolvedChat() {
   ) as ChatType | null;
 
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
-  interface ItemPropType {
-    item: Messagetype;
+  function handleSolvedChat() {
+    if (!solvedActiveChat) {
+      return;
+    }
+    dispatch(
+      updateSolvedChat({ chatId: solvedActiveChat.id, status: "accepted" })
+    ).then(() => {
+      dispatch(handleActiveChat(solvedActiveChat));
+      router.push("/chat");
+    });
   }
 
   const renderMessage: ListRenderItem<Messagetype> = ({
@@ -108,9 +124,7 @@ function SolvedChat() {
 
           <View style={styles.joinButtonContainer}>
             <TouchableOpacity
-              onPress={() => {
-                console.log("CONVERSATION STARTED");
-              }}
+              onPress={handleSolvedChat}
               style={styles.joinButton}
             >
               <View>
