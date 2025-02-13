@@ -43,7 +43,7 @@ function InboxChat({ chat }: PropType) {
 
   function handleNavigateToChat(chatId: string) {
     dispatch(getUnassignedChatMessages({ chatId }));
-    router.push("/unassignedChat");
+    router.navigate("/unassignedChat");
   }
 
   return (

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Pressable, View } from "react-native";
+import { ActivityIndicator, Pressable, View } from "react-native";
 
 import {
   Card,
@@ -20,6 +20,8 @@ import { getSolvedChats, getUnassignedChats } from "~/slices/inbox/thunk";
 import useGetUser from "~/hooks/getUser";
 
 export default function Inbox() {
+  const [unassignedLoading, setUnassignedLoading] = React.useState(false);
+  const [solvedLoading, setSolvedLoading] = React.useState(false);
   const user = useGetUser();
 
   const router = useRouter();
@@ -30,20 +32,23 @@ export default function Inbox() {
 
   React.useEffect(() => {
     if (!user) return;
+    setUnassignedLoading(true);
+    setSolvedLoading(true);
 
     dispatch(
       getUnassignedChats({ workspaceId: user.workspace.id, agentId: user.id })
-    );
+    ).then(() => setUnassignedLoading(false));
+
     dispatch(
       getSolvedChats({ workspaceId: user.workspace.id, agentId: user.id })
-    );
+    ).then(() => setSolvedLoading(false));
   }, [user]);
 
   function handleNavigateToUnassignedChats() {
-    router.push("/unassignedChats");
+    router.navigate("/unassignedChats");
   }
   function handleNavigateToSolvedChats() {
-    router.push("/solvedChats");
+    router.navigate("/solvedChats");
   }
 
   return (
@@ -70,9 +75,15 @@ export default function Inbox() {
               <CardTitle style={{ fontSize: 16 }}>Unassigned</CardTitle>
             </CardHeader>
             <CardContent>
-              <Text style={{ fontSize: 20 }}>
-                {unassignedChats.length.toString().padStart(2, "0")}
-              </Text>
+              {unassignedLoading ? (
+                <View className="flex justify-center">
+                  <ActivityIndicator />
+                </View>
+              ) : (
+                <Text style={{ fontSize: 20 }}>
+                  {unassignedChats.length.toString().padStart(2, "0")}
+                </Text>
+              )}
             </CardContent>
           </Pressable>
         </Card>
@@ -86,9 +97,15 @@ export default function Inbox() {
               <CardTitle style={{ fontSize: 16 }}>Solved</CardTitle>
             </CardHeader>
             <CardContent>
-              <Text style={{ fontSize: 20 }}>
-                {solvedChats.length.toString().padStart(2, "0")}
-              </Text>
+              {solvedLoading ? (
+                <View className="flex justify-center">
+                  <ActivityIndicator />
+                </View>
+              ) : (
+                <Text style={{ fontSize: 20 }}>
+                  {solvedChats.length.toString().padStart(2, "0")}
+                </Text>
+              )}
             </CardContent>
           </Pressable>
         </Card>
@@ -108,11 +125,18 @@ export default function Inbox() {
               Latest Unassigned Messages
             </Text>
           </View>
-          <View>
-            {unassignedChats.slice(0, 5).map((chat: ChatType) => (
-              <InboxChat key={chat.id} chat={chat} />
-            ))}
-          </View>
+
+          {unassignedLoading ? (
+            <View className="flex justify-center" style={{ height: 150 }}>
+              <ActivityIndicator size={35} />
+            </View>
+          ) : (
+            <View>
+              {unassignedChats.slice(0, 5).map((chat: ChatType) => (
+                <InboxChat key={chat.id} chat={chat} />
+              ))}
+            </View>
+          )}
         </View>
       </View>
     </View>

@@ -47,7 +47,7 @@ function UnassignedChat() {
 
     dispatch(handleActiveChat(unassingedActiveChat));
     dispatch(handleAddChat(unassingedActiveChat));
-    router.push("/chat");
+    router.navigate("/chat");
 
     // toast.success("Chat moved to open chats !", {
     //   position: "bottom-center",

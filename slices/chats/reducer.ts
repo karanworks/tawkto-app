@@ -6,12 +6,14 @@ interface InitialStateType {
   chats: ChatType[] | [];
   activeChat: ChatType | null;
   error: string;
+  loading: boolean;
 }
 
 const initialState: InitialStateType = {
   chats: [],
   activeChat: null,
   error: "",
+  loading: false,
 };
 
 const chatsSlice = createSlice({

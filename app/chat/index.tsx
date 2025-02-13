@@ -25,6 +25,7 @@ import { SquareCheckBig } from "~/lib/icons/SquareCheckBig";
 import { handleIncomingMessageUpdate } from "~/slices/chats/reducer";
 import { updateSolvedChat } from "~/slices/inbox/thunk";
 import TypingAnimation from "./TypingAnimation";
+import { useSegments } from "expo-router";
 
 interface ItemPropType {
   item: Messagetype;
@@ -38,6 +39,10 @@ function ChatMessaging() {
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState<{ [key: string]: boolean }>({});
   const flatListRef = useRef<FlatList>(null);
+
+  const segments = useSegments();
+
+  console.log("SEGMENTS IN CHATS TAB ->", segments);
 
   const colorScheme = useColorScheme();
   const iconColor = colorScheme === "dark" ? "#fff" : "#000";
@@ -118,7 +123,7 @@ function ChatMessaging() {
 
   function handleSolveMessage(chatId: string) {
     dispatch(updateSolvedChat({ chatId, status: "solved" }));
-    router.push("/(tabs)");
+    router.navigate("/(tabs)");
   }
 
   const renderMessage: ListRenderItem<Messagetype> = ({

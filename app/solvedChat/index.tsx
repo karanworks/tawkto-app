@@ -39,7 +39,7 @@ function SolvedChat() {
       updateSolvedChat({ chatId: solvedActiveChat.id, status: "accepted" })
     ).then(() => {
       dispatch(handleActiveChat(solvedActiveChat));
-      router.push("/chat");
+      router.navigate("/chat");
     });
   }
 

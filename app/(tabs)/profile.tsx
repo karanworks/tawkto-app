@@ -20,10 +20,10 @@ export default function Profile() {
   const router = useRouter();
 
   function handleNavigateToAccountSettings() {
-    router.push("/accountSettings");
+    router.navigate("/accountSettings");
   }
   function handleNavigateToWorkspaceSettings() {
-    router.push("/workspaceSettings");
+    router.navigate("/workspaceSettings");
   }
 
   async function handleLogout() {
@@ -46,14 +46,14 @@ export default function Profile() {
         "Manage your workspace settings like name, members etc here.",
       onPress: handleNavigateToWorkspaceSettings,
     },
-    {
-      name: "Manage Members",
-      icon: UsersRound,
-      description: "Invite new members and manage the older ones.",
-      onPress: () => {
-        console.log("Manager members button was clicked");
-      },
-    },
+    // {
+    //   name: "Manage Members",
+    //   icon: UsersRound,
+    //   description: "Invite new members and manage the older ones.",
+    //   onPress: () => {
+    //     console.log("Manager members button was clicked");
+    //   },
+    // },
   ];
 
   return (

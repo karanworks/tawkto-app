@@ -26,7 +26,7 @@ export default function Login() {
 
   function handleFormSubmit() {
     dispatch(login({ email, password })).then(() => {
-      router.push("/(tabs)");
+      router.navigate("/(tabs)");
     });
   }
 

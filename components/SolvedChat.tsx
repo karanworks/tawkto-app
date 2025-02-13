@@ -43,7 +43,7 @@ function SolvedChat({ chat }: PropType) {
 
   function handleNavigateToChat(chatId: string) {
     dispatch(getSolvedChatMessages({ chatId }));
-    router.push("/solvedChat");
+    router.navigate("/solvedChat");
   }
 
   return (

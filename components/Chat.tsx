@@ -17,7 +17,7 @@ function Chat({ chat }: ChatProps) {
 
   function handleNavigateToChat(chatId: string) {
     dispatch(getChatMessages({ chatId }));
-    router.push("/chat");
+    router.navigate("/chat");
   }
 
   return (
