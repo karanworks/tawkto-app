@@ -118,11 +118,11 @@ export default function Login() {
           </Button>
 
           {/* onPress={goToChatsPage} */}
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Link href="/(tabs)">
               <Text className="text-blue-500">Go to chats page</Text>
             </Link>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </CardFooter>
       </Card>
     </View>

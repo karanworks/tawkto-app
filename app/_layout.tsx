@@ -20,6 +20,7 @@ import { Provider } from "react-redux";
 import rootReducer from "../slices";
 import useGetUser from "~/hooks/getUser";
 import "~/socket/socket";
+import usePushNotification from "~/hooks/usePushNotification";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -47,6 +48,9 @@ export default function RootLayout() {
   const { colorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
   const user = useGetUser();
+  const { expoPushToken, notification } = usePushNotification();
+
+  console.log("GOT THE PUSH TOKEN ->", expoPushToken);
 
   useIsomorphicLayoutEffect(() => {
     if (hasMounted.current) {
@@ -103,6 +107,10 @@ export default function RootLayout() {
           <Stack.Screen
             name="solvedChats/index"
             options={{ title: "Solved Chats " }}
+          />
+          <Stack.Screen
+            name="notifications/index"
+            options={{ title: "Notifications" }}
           />
         </Stack>
         <PortalHost />

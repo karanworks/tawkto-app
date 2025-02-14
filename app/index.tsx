@@ -15,12 +15,14 @@ import { Link, useRouter } from "expo-router";
 import { Label } from "~/components/ui/label";
 import { login } from "../slices/login/thunk";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
+import usePushNotification from "~/hooks/usePushNotification";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { sendPushNotification, expoPushToken } = usePushNotification();
 
   function handleFormSubmit() {
     dispatch(login({ email, password })).then((res) => {
@@ -114,13 +116,25 @@ export default function Login() {
           >
             <Text style={{ color: "white" }}>Login</Text>
           </Button>
+          <Button
+            variant="default"
+            className="shadow shadow-foreground/5 w-full"
+            style={{ backgroundColor: "#25A0E2" }}
+            onPress={() => {
+              if (expoPushToken) {
+                sendPushNotification(expoPushToken);
+              }
+            }}
+          >
+            <Text style={{ color: "white" }}>Send Notification</Text>
+          </Button>
 
           {/* onPress={goToChatsPage} */}
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Link href="/(tabs)">
               <Text className="text-blue-500">Go to chats page</Text>
             </Link>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </CardFooter>
       </Card>
     </View>
