@@ -122,7 +122,11 @@ export default function Login() {
             style={{ backgroundColor: "#25A0E2" }}
             onPress={() => {
               if (expoPushToken) {
-                sendPushNotification(expoPushToken);
+                sendPushNotification(
+                  expoPushToken,
+                  "You have received a new message",
+                  "Hiii"
+                );
               }
             }}
           >

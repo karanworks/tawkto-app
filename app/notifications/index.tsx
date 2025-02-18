@@ -8,8 +8,6 @@ export default function NotificationsScreen() {
   const { notification } = usePushNotification();
   const [notifications, setNotifications] = useState<any[]>([]);
 
-  // Import Subscription type
-
   useEffect(() => {
     if (notification) {
       setNotifications((prev) => [notification, ...prev]);

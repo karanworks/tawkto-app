@@ -12,13 +12,18 @@ Notifications.setNotificationHandler({
   }),
 });
 
-async function sendPushNotification(expoPushToken: string) {
+async function sendPushNotification(
+  expoPushToken: string,
+  title: string,
+  body: string,
+  data: any = {}
+) {
   const message = {
     to: expoPushToken,
     sound: "default",
-    title: "Ye mera title hai",
-    body: "Aur bhai sab thik?",
-    data: { someData: "goes here" },
+    title,
+    body,
+    data,
   };
 
   await fetch("https://exp.host/--/api/v2/push/send", {
