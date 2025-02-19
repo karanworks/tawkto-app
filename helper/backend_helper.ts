@@ -50,3 +50,13 @@ export function updateSolvedChat({ chatId, status }: any) {
     status,
   });
 }
+
+//*****************************************************************//
+//*********************** NOTIFICATION TOKEN **********************//
+//*****************************************************************//
+export function registerNotificationToken({ userId, expoPushToken }: any) {
+  return api.post(
+    `${process.env.EXPO_PUBLIC_SERVER_URL}/notification-token/${userId}`,
+    { expoPushToken }
+  );
+}

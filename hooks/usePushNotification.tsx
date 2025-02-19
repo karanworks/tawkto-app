@@ -78,7 +78,6 @@ async function registerForPushNotificationsAsync() {
           projectId,
         })
       ).data;
-      console.log(pushTokenString);
       return pushTokenString;
     } catch (e: unknown) {
       handleRegistrationError(`${e}`);
@@ -98,7 +97,11 @@ export default function usePushNotification() {
 
   useEffect(() => {
     registerForPushNotificationsAsync()
-      .then((token) => setExpoPushToken(token ?? ""))
+      .then((token) => {
+        console.log("RECEIVED THE EXPO PUSH TOKEN ->", token);
+
+        token && setExpoPushToken(token);
+      })
       .catch((error: any) => setExpoPushToken(`${error}`));
 
     notificationListener.current =

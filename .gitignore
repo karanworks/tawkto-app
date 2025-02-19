@@ -44,3 +44,4 @@ expo-env.d.ts
 google-services.json
 /ios
 /android
+google-service-account-key.json

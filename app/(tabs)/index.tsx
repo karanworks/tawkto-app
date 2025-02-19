@@ -11,6 +11,8 @@ import socket from "~/socket/socket";
 import { getUnassignedChats } from "~/slices/inbox/thunk";
 import { handleIncomingMessageUpdate } from "~/slices/chats/reducer";
 import usePushNotification from "~/hooks/usePushNotification";
+import { registerNotificationToken } from "~/helper/backend_helper";
+import { setNotificatnonExpoPushToken } from "~/slices/expoPushToken/reducer";
 
 export default function Chats() {
   const [loading, setLoading] = useState(false);
@@ -21,6 +23,20 @@ export default function Chats() {
   const { sendPushNotification, expoPushToken } = usePushNotification();
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setNotificatnonExpoPushToken(expoPushToken));
+    registerNotificationToken({ userId: user?.id, expoPushToken }).then(
+      (res) => {
+        console.log(
+          "RESPONSE AFTER SETTING THE EXPO PUSH TOKEN IN THE BACKEND ->",
+          res
+        );
+      }
+    );
+  }, [expoPushToken]);
+
+  // console.log("EXPO PUSH TOKEN TO BACKEND ->", expoPushToken);
 
   useEffect(() => {
     if (!user) return;
@@ -48,8 +64,6 @@ export default function Chats() {
       })
     );
 
-    console.log("CHAT REQUEST ->", chat);
-
     // sendPushNotification(expoPushToken, "You have a new message request", `New Message`)
   }
 
@@ -66,35 +80,25 @@ export default function Chats() {
   const handleIncomingMessage = (message: Messagetype) => {
     dispatch(handleIncomingMessageUpdate(message));
 
-    console.log("MESSAGE REQUEST ->", message);
-
     console.log(
       "NEW MESSAGE TESTING ->",
       expoPushToken && message.sender.type === "visitor"
     );
-    console.log("NEW MESSAGE TESTING 1 ->", expoPushToken);
-    console.log("NEW MESSAGE TESTING 2 ->", message.sender.type === "visitor");
 
     if (expoPushToken && message.sender.type === "visitor") {
       const isChatRequest = chats.find((chat) => chat.id === message.chatId);
 
-      console.log("TESTING CHAT REQUEST ->", isChatRequest);
+      // if (!isChatRequest) {
+      //   sendPushNotification(
+      //     expoPushToken,
+      //     "You have a new chat request",
+      //     `${message.sender.name}: ${message.content}`
+      //   );
+      // } else {
+      //   console.log("ELSE CONDITION GOT TRIGGERED", message);
 
-      if (!isChatRequest) {
-        sendPushNotification(
-          expoPushToken,
-          "You have a new chat request",
-          `${message.sender.name}: ${message.content}`
-        );
-      } else {
-        console.log("ELSE CONDITION GOT TRIGGERED", message);
-
-        sendPushNotification(
-          expoPushToken,
-          message.sender.name,
-          message.content
-        );
-      }
+      sendPushNotification(expoPushToken, message.sender.name, message.content);
+      // }
     }
   };
 

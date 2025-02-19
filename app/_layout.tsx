@@ -21,6 +21,8 @@ import rootReducer from "../slices";
 import useGetUser from "~/hooks/getUser";
 import "~/socket/socket";
 import usePushNotification from "~/hooks/usePushNotification";
+import { useAppDispatch } from "~/hooks/useAppDispatch";
+import { setNotificatnonExpoPushToken } from "~/slices/expoPushToken/reducer";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -49,8 +51,6 @@ export default function RootLayout() {
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
   const user = useGetUser();
   const { expoPushToken, notification } = usePushNotification();
-
-  console.log("GOT THE PUSH TOKEN ->", expoPushToken);
 
   useIsomorphicLayoutEffect(() => {
     if (hasMounted.current) {
