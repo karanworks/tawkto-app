@@ -42,8 +42,6 @@ function ChatMessaging() {
 
   const segments = useSegments();
 
-  console.log("SEGMENTS IN CHATS TAB ->", segments);
-
   const colorScheme = useColorScheme();
   const iconColor = colorScheme === "dark" ? "#fff" : "#000";
   const user = useGetUser();

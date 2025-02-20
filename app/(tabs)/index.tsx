@@ -20,20 +20,18 @@ export default function Chats() {
 
   const { chats, activeChat } = useSelector((state: RootState) => state.Chats);
   const { unassignedChats } = useSelector((state: RootState) => state.Inbox);
-  const { sendPushNotification, expoPushToken } = usePushNotification();
+  const { expoPushToken } = usePushNotification();
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setNotificatnonExpoPushToken(expoPushToken));
-    registerNotificationToken({ userId: user?.id, expoPushToken }).then(
-      (res) => {
-        console.log(
-          "RESPONSE AFTER SETTING THE EXPO PUSH TOKEN IN THE BACKEND ->",
-          res
-        );
-      }
-    );
+    if (expoPushToken) {
+      dispatch(setNotificatnonExpoPushToken(expoPushToken));
+
+      registerNotificationToken({ userId: user?.id, expoPushToken }).then(
+        (res) => {}
+      );
+    }
   }, [expoPushToken]);
 
   // console.log("EXPO PUSH TOKEN TO BACKEND ->", expoPushToken);
@@ -79,27 +77,6 @@ export default function Chats() {
 
   const handleIncomingMessage = (message: Messagetype) => {
     dispatch(handleIncomingMessageUpdate(message));
-
-    console.log(
-      "NEW MESSAGE TESTING ->",
-      expoPushToken && message.sender.type === "visitor"
-    );
-
-    if (expoPushToken && message.sender.type === "visitor") {
-      const isChatRequest = chats.find((chat) => chat.id === message.chatId);
-
-      // if (!isChatRequest) {
-      //   sendPushNotification(
-      //     expoPushToken,
-      //     "You have a new chat request",
-      //     `${message.sender.name}: ${message.content}`
-      //   );
-      // } else {
-      //   console.log("ELSE CONDITION GOT TRIGGERED", message);
-
-      sendPushNotification(expoPushToken, message.sender.name, message.content);
-      // }
-    }
   };
 
   useEffect(() => {

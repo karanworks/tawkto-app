@@ -1,15 +1,19 @@
 import { useState, useEffect, useRef } from "react";
-import { Platform } from "react-native";
+import { Platform, AppState } from "react-native";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 
+const appStateRef = { current: "active" };
+
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
+  handleNotification: async () => {
+    return {
+      shouldShowAlert: appStateRef.current === "active" ? false : true, // Hide notifications if in foreground
+      shouldPlaySound: appStateRef.current === "active" ? false : true,
+      shouldSetBadge: appStateRef.current === "active" ? false : true,
+    };
+  },
 });
 
 async function sendPushNotification(
@@ -92,14 +96,21 @@ export default function usePushNotification() {
   const [notification, setNotification] = useState<
     Notifications.Notification | undefined
   >(undefined);
+
   const notificationListener = useRef<Notifications.EventSubscription>();
   const responseListener = useRef<Notifications.EventSubscription>();
+
+  // Listen for app state changes
+  const appStateListener = AppState.addEventListener(
+    "change",
+    (nextAppState) => {
+      appStateRef.current = nextAppState; // Update global appStateRef
+    }
+  );
 
   useEffect(() => {
     registerForPushNotificationsAsync()
       .then((token) => {
-        console.log("RECEIVED THE EXPO PUSH TOKEN ->", token);
-
         token && setExpoPushToken(token);
       })
       .catch((error: any) => setExpoPushToken(`${error}`));
@@ -115,6 +126,7 @@ export default function usePushNotification() {
       });
 
     return () => {
+      appStateListener.remove();
       notificationListener.current &&
         Notifications.removeNotificationSubscription(
           notificationListener.current

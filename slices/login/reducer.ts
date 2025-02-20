@@ -16,7 +16,7 @@ const loginSlice = createSlice({
       const response = action.payload?.data;
 
       if (response) {
-        state.user = response.data;
+        state.user = response;
       }
     });
   },
