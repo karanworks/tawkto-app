@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, TouchableOpacity, View, Text } from "react-native";
 import { Button } from "~/components/ui/button";
 import {
@@ -10,22 +10,33 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
-// const logoLight = require("../assets/images/logo-light.png");
 const logoLight = require("../../assets/images/logo-light.png");
-import { Link, useRouter } from "expo-router";
+import { Link, useRootNavigationState, useRouter } from "expo-router";
 import { Label } from "~/components/ui/label";
-// import { login } from "../slices/login/thunk";
 import { login } from "../../slices/login/thunk";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
+import usePushNotification from "~/hooks/usePushNotification";
+import useGetUser from "~/hooks/getUser";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { sendPushNotification, expoPushToken } = usePushNotification();
+  const user = useGetUser();
+  const navigationState = useRootNavigationState();
+
+  console.log("GETTING THE USER ON LOGIN PAGE ->", user);
+
+  // useEffect(() => {
+  //   if (navigationState?.key && user) {
+  //     router.navigate("/(tabs)");
+  //   }
+  // }, [user]);
 
   function handleFormSubmit() {
-    dispatch(login({ email, password })).then(() => {
+    dispatch(login({ email, password })).then((res) => {
       router.navigate("/(tabs)");
     });
   }
@@ -115,6 +126,22 @@ export default function Login() {
             onPress={handleFormSubmit}
           >
             <Text style={{ color: "white" }}>Login</Text>
+          </Button>
+          <Button
+            variant="default"
+            className="shadow shadow-foreground/5 w-full"
+            style={{ backgroundColor: "#25A0E2" }}
+            onPress={() => {
+              if (expoPushToken) {
+                sendPushNotification(
+                  expoPushToken,
+                  "You have received a new message",
+                  "Hiii"
+                );
+              }
+            }}
+          >
+            <Text style={{ color: "white" }}>Send Notification</Text>
           </Button>
 
           {/* onPress={goToChatsPage} */}

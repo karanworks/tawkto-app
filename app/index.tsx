@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, TouchableOpacity, View, Text } from "react-native";
 import { Button } from "~/components/ui/button";
 import {
@@ -11,11 +11,12 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 const logoLight = require("../assets/images/logo-light.png");
-import { Link, useRouter } from "expo-router";
+import { Link, useRootNavigationState, useRouter } from "expo-router";
 import { Label } from "~/components/ui/label";
 import { login } from "../slices/login/thunk";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
 import usePushNotification from "~/hooks/usePushNotification";
+import useGetUser from "~/hooks/getUser";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -23,6 +24,16 @@ export default function Login() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { sendPushNotification, expoPushToken } = usePushNotification();
+  const user = useGetUser();
+  const navigationState = useRootNavigationState();
+
+  console.log("GETTING THE USER ON LOGIN PAGE ->", user);
+
+  // useEffect(() => {
+  //   if (navigationState?.key && user) {
+  //     router.navigate("/(tabs)");
+  //   }
+  // }, [user]);
 
   function handleFormSubmit() {
     dispatch(login({ email, password })).then((res) => {
