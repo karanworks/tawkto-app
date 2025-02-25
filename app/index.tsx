@@ -27,8 +27,6 @@ export default function Login() {
   const user = useGetUser();
   const navigationState = useRootNavigationState();
 
-  console.log("GETTING THE USER ON LOGIN PAGE ->", user);
-
   // useEffect(() => {
   //   if (navigationState?.key && user) {
   //     router.navigate("/(tabs)");
