@@ -27,11 +27,11 @@ export default function Login() {
   const user = useGetUser();
   const navigationState = useRootNavigationState();
 
-  // useEffect(() => {
-  //   if (navigationState?.key && user) {
-  //     router.navigate("/(tabs)");
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (navigationState?.key && user) {
+      router.navigate("/(tabs)");
+    }
+  }, [user]);
 
   function handleFormSubmit() {
     dispatch(login({ email, password })).then((res) => {
