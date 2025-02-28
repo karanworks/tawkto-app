@@ -16,7 +16,7 @@ import { PortalHost } from "@rn-primitives/portal";
 import { ThemeToggle } from "~/components/ThemeToggle";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import { configureStore } from "@reduxjs/toolkit";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import rootReducer from "../slices";
 import useGetUser from "~/hooks/getUser";
 import "~/socket/socket";
@@ -50,7 +50,6 @@ export default function RootLayout() {
   const { colorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
   const user = useGetUser();
-  const { expoPushToken, notification } = usePushNotification();
 
   useIsomorphicLayoutEffect(() => {
     if (hasMounted.current) {

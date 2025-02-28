@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Image, TouchableOpacity, View, Text } from "react-native";
 import { Button } from "~/components/ui/button";
 import {
@@ -17,15 +17,47 @@ import { login } from "../slices/login/thunk";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
 import usePushNotification from "~/hooks/usePushNotification";
 import useGetUser from "~/hooks/getUser";
+import { useSelector } from "react-redux";
+import { RootState } from "./_layout";
+import * as Notifications from "expo-notifications";
+import { handleActiveChat } from "~/slices/chats/reducer";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const dispatch = useAppDispatch();
   const router = useRouter();
-  const { sendPushNotification, expoPushToken } = usePushNotification();
   const user = useGetUser();
   const navigationState = useRootNavigationState();
+
+  const { chats } = useSelector((state: RootState) => state.Chats);
+  const dispatch = useAppDispatch();
+  const notificationResponseRef = useRef<Notifications.EventSubscription>();
+
+  useEffect(() => {
+    notificationResponseRef.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        const chatId = response.notification.request.content.data.chatId;
+
+        if (chatId) {
+          const chat = chats.find((chat) => chat.id === chatId);
+          console.log(
+            "NOTIFICATION WAS LISTENED IN THE TABROOT AS WELL ->",
+            response.notification.request.content.data
+          );
+
+          router.push("/chat");
+
+          dispatch(handleActiveChat(chat));
+        }
+      });
+
+    return () => {
+      notificationResponseRef.current &&
+        Notifications.removeNotificationSubscription(
+          notificationResponseRef.current
+        );
+    };
+  }, [chats]);
 
   useEffect(() => {
     if (navigationState?.key && user) {
@@ -125,7 +157,7 @@ export default function Login() {
           >
             <Text style={{ color: "white" }}>Login</Text>
           </Button>
-          <Button
+          {/* <Button
             variant="default"
             className="shadow shadow-foreground/5 w-full"
             style={{ backgroundColor: "#25A0E2" }}
@@ -140,7 +172,7 @@ export default function Login() {
             }}
           >
             <Text style={{ color: "white" }}>Send Notification</Text>
-          </Button>
+          </Button> */}
 
           {/* onPress={goToChatsPage} */}
           {/* <TouchableOpacity>

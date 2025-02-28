@@ -3,6 +3,7 @@ import { Platform, AppState } from "react-native";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
+import { useRouter } from "expo-router";
 
 const appStateRef = { current: "active" };
 
@@ -99,6 +100,7 @@ export default function usePushNotification() {
 
   const notificationListener = useRef<Notifications.EventSubscription>();
   const responseListener = useRef<Notifications.EventSubscription>();
+  const router = useRouter();
 
   // Listen for app state changes
   const appStateListener = AppState.addEventListener(
@@ -120,10 +122,12 @@ export default function usePushNotification() {
         setNotification(notification);
       });
 
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
+    // responseListener.current =
+    //   Notifications.addNotificationResponseReceivedListener((response) => {
+    //     // console.log(response.notification.request.content);
+    //     router.push("/chat");
+
+    //   });
 
     return () => {
       appStateListener.remove();
@@ -131,8 +135,8 @@ export default function usePushNotification() {
         Notifications.removeNotificationSubscription(
           notificationListener.current
         );
-      responseListener.current &&
-        Notifications.removeNotificationSubscription(responseListener.current);
+      // responseListener.current &&
+      //   Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
 
@@ -140,5 +144,6 @@ export default function usePushNotification() {
     expoPushToken,
     notification,
     sendPushNotification,
+    responseListener,
   };
 }

@@ -34,8 +34,6 @@ export default function Chats() {
     }
   }, [expoPushToken]);
 
-  // console.log("EXPO PUSH TOKEN TO BACKEND ->", expoPushToken);
-
   useEffect(() => {
     if (!user) return;
     setLoading(true);

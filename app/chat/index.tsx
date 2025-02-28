@@ -26,6 +26,7 @@ import { handleIncomingMessageUpdate } from "~/slices/chats/reducer";
 import { updateSolvedChat } from "~/slices/inbox/thunk";
 import TypingAnimation from "./TypingAnimation";
 import { useSegments } from "expo-router";
+// import * as Notifications from "expo-notifications";
 
 interface ItemPropType {
   item: Messagetype;
