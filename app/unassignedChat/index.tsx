@@ -19,6 +19,7 @@ import socket from "~/socket/socket";
 import useGetUser from "~/hooks/getUser";
 import { handleActiveChat, handleAddChat } from "~/slices/chats/reducer";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 interface ItemPropType {
   item: Messagetype;
@@ -32,6 +33,7 @@ function UnassignedChat() {
   const router = useRouter();
   const user = useGetUser();
   const dispatch = useAppDispatch();
+  const { isDarkColorScheme } = useColorScheme();
 
   function handleJoinConversation() {
     if (!user || !unassingedActiveChat) {
@@ -103,11 +105,20 @@ function UnassignedChat() {
     <>
       {unassingedActiveChat && (
         <KeyboardAvoidingView
-          style={styles.container}
+          // style={styles.container}
           behavior={Platform.OS === "ios" ? "padding" : undefined}
           keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+          style={{
+            ...styles.container,
+            backgroundColor: `${isDarkColorScheme ? "#212529" : "white"}`,
+          }}
         >
-          <View style={styles.header}>
+          <View
+            style={{
+              ...styles.header,
+              backgroundColor: `${isDarkColorScheme ? "#212529" : "white"}`,
+            }}
+          >
             <TouchableOpacity onPress={() => router.back()}>
               <Ionicons name="chevron-back" size={24} color="#000" />
             </TouchableOpacity>
@@ -118,10 +129,21 @@ function UnassignedChat() {
               </View>
 
               <View>
-                <Text style={styles.headerTitle}>
+                <Text
+                  style={styles.headerTitle}
+                  className={`${
+                    isDarkColorScheme ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   {unassingedActiveChat.visitor.name}
                 </Text>
-                <Text className="text-fray-700 text-sm">Online</Text>
+                <Text
+                  className={`text-sm ${
+                    isDarkColorScheme ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
+                  Online
+                </Text>
               </View>
             </View>
           </View>

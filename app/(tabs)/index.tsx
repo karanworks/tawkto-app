@@ -13,10 +13,12 @@ import { handleIncomingMessageUpdate } from "~/slices/chats/reducer";
 import usePushNotification from "~/hooks/usePushNotification";
 import { registerNotificationToken } from "~/helper/backend_helper";
 import { setNotificatnonExpoPushToken } from "~/slices/expoPushToken/reducer";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function Chats() {
   const [loading, setLoading] = useState(false);
   const user = useGetUser();
+  const { isDarkColorScheme } = useColorScheme();
 
   const { chats, activeChat } = useSelector((state: RootState) => state.Chats);
   const { unassignedChats } = useSelector((state: RootState) => state.Inbox);
@@ -87,7 +89,12 @@ export default function Chats() {
 
   return (
     <View
-      className="flex-1 items-center justify-center  bg-secondary/30 px-3"
+      // className="flex-1 items-center justify-center  bg-secondary/30 px-3"
+      className="flex-1 items-center justify-center px-3"
+      style={{
+        backgroundColor: `${isDarkColorScheme ? "#212529" : "white"}`,
+      }}
+      // className={isDarkColorScheme ? "text-gray-300" : "text-gray-600"}
       // style={{ height: "200%" }}
     >
       {/* {chats?.map((chat: ChatType) => (

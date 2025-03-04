@@ -18,6 +18,7 @@ import moment from "moment";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
 import { updateSolvedChat } from "~/slices/inbox/thunk";
 import { handleActiveChat } from "~/slices/chats/reducer";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 interface ItemPropType {
   item: Messagetype;
@@ -27,7 +28,7 @@ function SolvedChat() {
   const solvedActiveChat = useSelector(
     (state: RootState) => state.Inbox.solvedActiveChat
   ) as ChatType | null;
-
+  const { isDarkColorScheme } = useColorScheme();
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -91,11 +92,20 @@ function SolvedChat() {
     <>
       {solvedActiveChat && (
         <KeyboardAvoidingView
-          style={styles.container}
+          // style={styles.container}
           behavior={Platform.OS === "ios" ? "padding" : undefined}
           keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+          style={{
+            ...styles.container,
+            backgroundColor: `${isDarkColorScheme ? "#212529" : "white"}`,
+          }}
         >
-          <View style={styles.header}>
+          <View
+            style={{
+              ...styles.header,
+              backgroundColor: `${isDarkColorScheme ? "#212529" : "white"}`,
+            }}
+          >
             <TouchableOpacity onPress={() => router.back()}>
               <Ionicons name="chevron-back" size={24} color="#000" />
             </TouchableOpacity>
@@ -106,10 +116,21 @@ function SolvedChat() {
               </View>
 
               <View>
-                <Text style={styles.headerTitle}>
+                <Text
+                  style={styles.headerTitle}
+                  className={` ${
+                    isDarkColorScheme ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   {solvedActiveChat.visitor.name}
                 </Text>
-                <Text className="text-fray-700 text-sm">Online</Text>
+                <Text
+                  className={`text-sm ${
+                    isDarkColorScheme ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
+                  Online
+                </Text>
               </View>
             </View>
           </View>

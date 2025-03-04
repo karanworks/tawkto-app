@@ -79,21 +79,39 @@ export default function RootLayout() {
             options={{
               title: "Login",
               headerRight: () => <ThemeToggle />,
+              headerStyle: {
+                backgroundColor: isDarkColorScheme ? "#212529" : "white",
+              },
             }}
           />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen
             name="accountSettings/index"
-            options={{ title: "Account Settings" }}
+            options={{
+              title: "Account Settings",
+              headerStyle: {
+                backgroundColor: isDarkColorScheme ? "#212529" : "white",
+              },
+            }}
           />
           <Stack.Screen
             name="workspaceSettings/index"
-            options={{ title: "Workspace Settings" }}
+            options={{
+              title: "Workspace Settings",
+              headerStyle: {
+                backgroundColor: isDarkColorScheme ? "#212529" : "white",
+              },
+            }}
           />
           <Stack.Screen name="chat/index" options={{ headerShown: false }} />
           <Stack.Screen
             name="unassignedChats/index"
-            options={{ title: "Unassigned Chats" }}
+            options={{
+              title: "Unassigned Chats",
+              headerStyle: {
+                backgroundColor: isDarkColorScheme ? "#212529" : "white",
+              },
+            }}
           />
           <Stack.Screen
             name="unassignedChat/index"
@@ -105,7 +123,12 @@ export default function RootLayout() {
           />
           <Stack.Screen
             name="solvedChats/index"
-            options={{ title: "Solved Chats " }}
+            options={{
+              title: "Solved Chats ",
+              headerStyle: {
+                backgroundColor: isDarkColorScheme ? "#212529" : "white",
+              },
+            }}
           />
           <Stack.Screen
             name="notifications/index"

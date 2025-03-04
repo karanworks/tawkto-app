@@ -7,11 +7,13 @@ import { handleActiveChat } from "~/slices/chats/reducer";
 import { useSelector } from "react-redux";
 import { RootState } from "../_layout";
 import * as Notifications from "expo-notifications";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 const TabRoot = () => {
   const { chats } = useSelector((state: RootState) => state.Chats);
   const dispatch = useAppDispatch();
   const notificationResponseRef = useRef<Notifications.EventSubscription>();
+  const { isDarkColorScheme } = useColorScheme();
 
   useEffect(() => {
     notificationResponseRef.current =
@@ -47,18 +49,27 @@ const TabRoot = () => {
         name="index"
         options={{
           title: "Chats",
+          headerStyle: {
+            backgroundColor: isDarkColorScheme ? "#212529" : "white",
+          },
         }}
       />
       <Tabs.Screen
         name="inbox"
         options={{
           title: "Inbox",
+          headerStyle: {
+            backgroundColor: isDarkColorScheme ? "#212529" : "white",
+          },
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: "Profile",
+          headerStyle: {
+            backgroundColor: isDarkColorScheme ? "#212529" : "white",
+          },
         }}
       />
     </Tabs>

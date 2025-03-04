@@ -10,11 +10,24 @@ import {
 import { Input } from "~/components/ui/input";
 import { Text } from "~/components/ui/text";
 import { Label } from "~/components/ui/label";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 function AccountSettings() {
+  const { isDarkColorScheme } = useColorScheme();
   return (
-    <View style={styles.cardContainer}>
-      <Card className="w-full max-w-sm" style={styles.updateDetailsCard}>
+    <View
+      style={{
+        ...styles.cardContainer,
+        backgroundColor: `${isDarkColorScheme ? "#212529" : "white"}`,
+      }}
+    >
+      <Card
+        className="w-full max-w-sm"
+        style={{
+          ...styles.updateDetailsCard,
+          backgroundColor: `${isDarkColorScheme ? "#292E32" : "white"}`,
+        }}
+      >
         <CardHeader>
           <CardTitle>Account Info</CardTitle>
           <CardDescription>
@@ -24,15 +37,34 @@ function AccountSettings() {
         <CardContent className="gap-4 native:gap-2">
           <View className="gap-1">
             <Label nativeID="name">Name</Label>
-            <Input aria-aria-labelledby="name" defaultValue="Karan" />
+            <Input
+              aria-labelledby="name"
+              defaultValue="Karan"
+              style={{
+                backgroundColor: `${isDarkColorScheme ? "#424b52" : "white"}`,
+              }}
+            />
           </View>
           <View className="gap-1">
             <Label nativeID="email">Email</Label>
-            <Input id="email" defaultValue="karan@gmail.com" />
+            <Input
+              id="email"
+              defaultValue="karan@gmail.com"
+              style={{
+                backgroundColor: `${isDarkColorScheme ? "#424b52" : "white"}`,
+              }}
+            />
           </View>
           <View className="gap-1">
             <Label nativeID="password">Password</Label>
-            <Input id="password" defaultValue="123456" secureTextEntry />
+            <Input
+              id="password"
+              defaultValue="123456"
+              secureTextEntry
+              style={{
+                backgroundColor: `${isDarkColorScheme ? "#424b52" : "white"}`,
+              }}
+            />
           </View>
         </CardContent>
         <CardFooter>

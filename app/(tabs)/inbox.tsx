@@ -18,11 +18,13 @@ import { ChatType } from "~/.expo/types/types";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
 import { getSolvedChats, getUnassignedChats } from "~/slices/inbox/thunk";
 import useGetUser from "~/hooks/getUser";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function Inbox() {
   const [unassignedLoading, setUnassignedLoading] = React.useState(false);
   const [solvedLoading, setSolvedLoading] = React.useState(false);
   const user = useGetUser();
+  const { isDarkColorScheme } = useColorScheme();
 
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -52,7 +54,12 @@ export default function Inbox() {
   }
 
   return (
-    <View className="flex-1 gap-5 p-6 bg-secondary/30">
+    <View
+      className="flex-1 gap-5 p-6"
+      style={{
+        backgroundColor: `${isDarkColorScheme ? "#212529" : "white"}`,
+      }}
+    >
       <View>
         <View>
           <Text style={{ fontSize: 22, fontWeight: "bold" }}>All Messages</Text>
@@ -66,7 +73,10 @@ export default function Inbox() {
       </View>
 
       <View className="flex flex-row gap-4">
-        <Card className="flex-1 items-center">
+        <Card
+          className="flex-1 items-center"
+          style={{ backgroundColor: isDarkColorScheme ? "#292E32" : "#e5e5e5" }}
+        >
           <Pressable
             className="w-full items-center"
             onPress={handleNavigateToUnassignedChats}
@@ -88,7 +98,10 @@ export default function Inbox() {
           </Pressable>
         </Card>
 
-        <Card className="flex-1 items-center">
+        <Card
+          className="flex-1 items-center"
+          style={{ backgroundColor: isDarkColorScheme ? "#292E32" : "#e5e5e5" }}
+        >
           <Pressable
             className="w-full items-center"
             onPress={handleNavigateToSolvedChats}

@@ -6,12 +6,19 @@ import { RootState } from "../_layout";
 import { ChatType } from "~/.expo/types/types";
 import { useSelector } from "react-redux";
 import InboxChat from "~/components/InboxChat";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function UnassignedChats() {
   const { unassignedChats } = useSelector((state: RootState) => state.Inbox);
+  const { isDarkColorScheme } = useColorScheme();
 
   return (
-    <View className="flex-1 items-center  bg-secondary/30 px-3">
+    <View
+      className="flex-1 items-center   px-3"
+      style={{
+        backgroundColor: `${isDarkColorScheme ? "#212529" : "white"}`,
+      }}
+    >
       {/* <View className="w-full" style={{ marginBlock: 10 }}>
         <Input placeholder="Search chat" />
         <Search style={{ position: "absolute", zIndex: 9999999 }} />

@@ -12,13 +12,14 @@ import { Text } from "~/components/ui/text";
 import { Label } from "~/components/ui/label";
 import useGetUser from "~/hooks/getUser";
 import { useEffect, useState } from "react";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 function WorkspaceSettings() {
   const user = useGetUser();
   const [workspaceName, setWorkspaceName] = useState(
     user?.workspace?.name || ""
   );
-
+  const { isDarkColorScheme } = useColorScheme();
   useEffect(() => {
     if (user?.workspace?.name) {
       setWorkspaceName(user.workspace.name);
@@ -29,8 +30,19 @@ function WorkspaceSettings() {
     setWorkspaceName(text);
   }
   return (
-    <View style={styles.cardContainer}>
-      <Card className="w-full max-w-sm" style={styles.updateDetailsCard}>
+    <View
+      style={{
+        ...styles.cardContainer,
+        backgroundColor: `${isDarkColorScheme ? "#212529" : "white"}`,
+      }}
+    >
+      <Card
+        className="w-full max-w-sm"
+        style={{
+          ...styles.updateDetailsCard,
+          backgroundColor: `${isDarkColorScheme ? "#292E32" : "white"}`,
+        }}
+      >
         <CardHeader>
           <CardTitle>Workspace Details</CardTitle>
           <CardDescription>
@@ -41,9 +53,12 @@ function WorkspaceSettings() {
           <View className="gap-1">
             <Label nativeID="workspaceName">Workspace Name</Label>
             <Input
-              aria-aria-labelledby="workspaceName"
+              aria-labelledby="workspaceName"
               onChangeText={handleWorkspaceName}
               value={workspaceName}
+              style={{
+                backgroundColor: `${isDarkColorScheme ? "#424b52" : "white"}`,
+              }}
             />
           </View>
         </CardContent>

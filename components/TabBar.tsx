@@ -7,6 +7,7 @@ import { MessageCircle } from "~/lib/icons/MessageCircle";
 import { UserRound } from "~/lib/icons/UserRound";
 import { Text } from "~/components/ui/text";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 interface IconProps {
   color: string;
@@ -28,6 +29,8 @@ const TabBar: React.FC<BottomTabBarProps> = ({
 }) => {
   const { colors } = useTheme();
   const { buildHref } = useLinkBuilder();
+  const { isDarkColorScheme } = useColorScheme();
+
   const icons: Record<RouteNames, React.FC<IconProps>> = {
     index: (props: IconProps) => (
       <MessageCircle
@@ -63,7 +66,10 @@ const TabBar: React.FC<BottomTabBarProps> = ({
 
   return (
     // <View style={{ flexDirection: 'row' }}>
-    <View style={styles.tabbar}>
+    <View
+      style={styles.tabbar}
+      className={isDarkColorScheme ? "bg-gray-800" : "bg-white"}
+    >
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -117,12 +123,25 @@ const TabBar: React.FC<BottomTabBarProps> = ({
             style={styles.tabbarItem}
           >
             {icons[route.name]({
-              color: isFocused ? "hsl(201, 77%, 52%)" : "#696969",
+              color: isFocused
+                ? isDarkColorScheme
+                  ? "hsl(201, 100%, 75%)" // Light blue for dark mode focus
+                  : "hsl(201, 77%, 52%)" // Regular blue for light mode focus
+                : isDarkColorScheme
+                ? "#A9A9A9" // Lighter gray for dark mode
+                : "#696969", // Dark gray for light mode
             })}
+
             {/* <Text style={{ color: isFocused ? colors.primary : colors.text , fontSize: 15}}> */}
             <Text
               style={{
-                color: isFocused ? "#25A0E2" : "#696969",
+                color: isFocused
+                  ? isDarkColorScheme
+                    ? "hsl(201, 100%, 75%)" // Light blue for dark mode focus
+                    : "hsl(201, 77%, 52%)" // Regular blue for light mode focus
+                  : isDarkColorScheme
+                  ? "#A9A9A9" // Lighter gray for dark mode
+                  : "#696969", // Dark gray for light mode,
                 fontSize: 13,
                 fontWeight: "bold",
               }}
@@ -144,7 +163,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "white",
+    // backgroundColor: "red",
     marginHorizontal: 20,
     paddingVertical: 10,
     // borderColor: "blue",

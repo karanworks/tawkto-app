@@ -21,7 +21,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "./_layout";
 import * as Notifications from "expo-notifications";
 import { handleActiveChat } from "~/slices/chats/reducer";
-import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -29,7 +28,6 @@ export default function Login() {
   const router = useRouter();
   const user = useGetUser();
   const navigationState = useRootNavigationState();
-  const { isDarkColorScheme } = useColorScheme();
 
   const { chats } = useSelector((state: RootState) => state.Chats);
   const dispatch = useAppDispatch();
@@ -104,18 +102,8 @@ export default function Login() {
   }
 
   return (
-    <View
-      className="flex-1 justify-center items-center gap-5 p-6 "
-      style={{
-        backgroundColor: `${isDarkColorScheme ? "#212529" : "white"}`,
-      }}
-    >
-      <Card
-        className="w-full max-w-sm pb-6 rounded-2xl"
-        style={{
-          backgroundColor: `${isDarkColorScheme ? "#292E32" : "white"}`,
-        }}
-      >
+    <View className="flex-1 justify-center items-center gap-5 p-6 bg-secondary/30">
+      <Card className="w-full max-w-sm pb-6 rounded-2xl">
         <CardHeader className="items-center">
           <Image source={logoLight} style={{ width: 60, height: 60 }} />
           <View className="p-2" />
@@ -137,9 +125,7 @@ export default function Login() {
                 style={{
                   fontSize: 16,
                 }}
-                className={
-                  isDarkColorScheme ? "text-gray-300" : "text-gray-600"
-                }
+                className="text-gray-600"
               >
                 Please enter your details to login
               </Text>
@@ -163,9 +149,6 @@ export default function Login() {
                 aria-errormessage="emailError"
                 value={email}
                 onChangeText={handleEmailChange}
-                style={{
-                  backgroundColor: `${isDarkColorScheme ? "#424b52" : "white"}`,
-                }}
               />
             </View>
             <View>
@@ -184,9 +167,6 @@ export default function Login() {
                 value={password}
                 onChangeText={handlePasswordChange}
                 secureTextEntry
-                style={{
-                  backgroundColor: `${isDarkColorScheme ? "#424b52" : "white"}`,
-                }}
               />
             </View>
           </View>
@@ -202,7 +182,7 @@ export default function Login() {
           </Button>
           {/* <Button
             variant="default"
-            className="shadow shadow-foreground/5 w/full"
+            className="shadow shadow-foreground/5 w-full"
             style={{ backgroundColor: "#25A0E2" }}
             onPress={() => {
               if (expoPushToken) {

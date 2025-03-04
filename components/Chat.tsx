@@ -6,6 +6,7 @@ import moment from "moment";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
 import { getChatMessages } from "~/slices/chats/thunk";
 import { useRouter } from "expo-router";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 interface ChatProps {
   chat: ChatType;
@@ -14,6 +15,7 @@ interface ChatProps {
 function Chat({ chat }: ChatProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { isDarkColorScheme } = useColorScheme();
 
   function handleNavigateToChat(chatId: string) {
     dispatch(getChatMessages({ chatId }));
@@ -22,7 +24,9 @@ function Chat({ chat }: ChatProps) {
 
   return (
     <Pressable
-      className="flex flex-row items-center w-full gap-3 border-b border-b-gray-100 "
+      className={`flex flex-row items-center w-full gap-3 border-b ${
+        isDarkColorScheme ? "border-b-gray-700" : "border-b-gray-100"
+      }`}
       style={{ height: 70 }}
       onPress={() => handleNavigateToChat(chat.id)}
     >
@@ -35,10 +39,10 @@ function Chat({ chat }: ChatProps) {
             style={{
               color: "white",
               fontWeight: "bold",
-              fontSize: 20,
+              fontSize: 16,
             }}
           >
-            {chat.visitor.name.charAt(0)}
+            {chat.visitor.name.slice(0, 2).toUpperCase()}
           </Text>
         </View>
       </View>
@@ -59,7 +63,10 @@ function Chat({ chat }: ChatProps) {
           </View>
 
           <View>
-            <Text style={{ fontSize: 12, color: "#404040" }}>
+            <Text
+              style={{ fontSize: 12 }}
+              className={isDarkColorScheme ? "text-gray-300" : "text-gray-600"}
+            >
               {chat.messages.length !== 0
                 ? moment(
                     chat.messages[chat.messages.length - 1].createdAt
@@ -70,7 +77,11 @@ function Chat({ chat }: ChatProps) {
         </View>
         <View className="flex flex-row items-end justify-between align gap-2">
           <View style={{ width: 280 }}>
-            <Text style={{ fontSize: 15, color: "#404040" }} numberOfLines={1}>
+            <Text
+              style={{ fontSize: 15 }}
+              numberOfLines={1}
+              className={isDarkColorScheme ? "text-gray-300" : "text-gray-600"}
+            >
               {chat.messages.length !== 0 &&
                 chat.messages[chat.messages.length - 1].content}
             </Text>

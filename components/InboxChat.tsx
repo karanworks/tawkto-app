@@ -29,6 +29,7 @@ import { useAppDispatch } from "~/hooks/useAppDispatch";
 import { useRouter } from "expo-router";
 import { getUnassignedChatMessages } from "~/slices/inbox/thunk";
 import moment from "moment";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 const GITHUB_AVATAR_URI =
   "https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg";
@@ -40,6 +41,7 @@ interface PropType {
 function InboxChat({ chat }: PropType) {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { isDarkColorScheme } = useColorScheme();
 
   function handleNavigateToChat(chatId: string) {
     dispatch(getUnassignedChatMessages({ chatId }));
@@ -48,7 +50,9 @@ function InboxChat({ chat }: PropType) {
 
   return (
     <Pressable
-      className="flex flex-row items-center w-full gap-2 border-b border-b-gray-100 "
+      className={`flex flex-row items-center w-full gap-3 border-b ${
+        isDarkColorScheme ? "border-b-gray-700" : "border-b-gray-100"
+      }`}
       style={{ height: 70 }}
       onPress={() => handleNavigateToChat(chat.id)}
     >
@@ -61,10 +65,10 @@ function InboxChat({ chat }: PropType) {
             style={{
               color: "white",
               fontWeight: "bold",
-              fontSize: 20,
+              fontSize: 16,
             }}
           >
-            {chat.visitor.name.charAt(0)}
+            {chat.visitor.name.slice(0, 2).toUpperCase()}
           </Text>
         </View>
       </View>
@@ -85,7 +89,10 @@ function InboxChat({ chat }: PropType) {
           </View>
 
           <View>
-            <Text style={{ fontSize: 12, color: "#404040" }}>
+            <Text
+              style={{ fontSize: 12 }}
+              className={isDarkColorScheme ? "text-gray-300" : "text-gray-600"}
+            >
               {chat.messages.length !== 0
                 ? moment(
                     chat.messages[chat.messages.length - 1].createdAt
@@ -96,7 +103,11 @@ function InboxChat({ chat }: PropType) {
         </View>
         <View className="flex flex-row items-end justify-between align gap-2">
           <View>
-            <Text style={{ fontSize: 15, color: "#404040" }} numberOfLines={1}>
+            <Text
+              style={{ fontSize: 15 }}
+              numberOfLines={1}
+              className={isDarkColorScheme ? "text-gray-300" : "text-gray-600"}
+            >
               {chat.messages.length !== 0 &&
                 chat.messages[chat.messages.length - 1].content}
             </Text>

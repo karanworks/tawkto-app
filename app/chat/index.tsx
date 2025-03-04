@@ -14,7 +14,7 @@ import { useState, useRef, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { ChatType, Messagetype } from "../../.expo/types/types";
-import { useColorScheme } from "react-native";
+// import { useColorScheme } from "react-native";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import { RootState } from "../_layout";
@@ -26,6 +26,8 @@ import { handleIncomingMessageUpdate } from "~/slices/chats/reducer";
 import { updateSolvedChat } from "~/slices/inbox/thunk";
 import TypingAnimation from "./TypingAnimation";
 import { useSegments } from "expo-router";
+import { useColorScheme } from "~/lib/useColorScheme";
+
 // import * as Notifications from "expo-notifications";
 
 interface ItemPropType {
@@ -40,11 +42,12 @@ function ChatMessaging() {
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState<{ [key: string]: boolean }>({});
   const flatListRef = useRef<FlatList>(null);
+  const { isDarkColorScheme } = useColorScheme();
 
   const segments = useSegments();
 
-  const colorScheme = useColorScheme();
-  const iconColor = colorScheme === "dark" ? "#fff" : "#000";
+  // const colorScheme = useColorScheme();
+  const iconColor = isDarkColorScheme ? "#fff" : "#000";
   const user = useGetUser();
   const dispatch = useAppDispatch();
 
@@ -177,10 +180,14 @@ function ChatMessaging() {
     <>
       {activeChat && (
         <KeyboardAvoidingView
-          className="bg-background"
-          style={{ ...styles.container }}
+          // className="bg-background"
+          // style={{ ...styles.container }}
           behavior={Platform.OS === "ios" ? "padding" : undefined}
           keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+          style={{
+            ...styles.container,
+            backgroundColor: `${isDarkColorScheme ? "#212529" : "white"}`,
+          }}
         >
           <View style={styles.header}>
             <TouchableOpacity onPress={() => router.back()}>

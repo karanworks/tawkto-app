@@ -15,9 +15,11 @@ import { UsersRound } from "~/lib/icons/UsersRound";
 import { useRouter } from "expo-router";
 import { removeItem } from "~/helper/storage";
 import { Button } from "~/components/ui/button";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function Profile() {
   const router = useRouter();
+  const { isDarkColorScheme } = useColorScheme();
 
   function handleNavigateToAccountSettings() {
     router.navigate("/accountSettings");
@@ -59,13 +61,22 @@ export default function Profile() {
   return (
     <View
       className="flex-1 p-3 bg-secondary"
-      style={styles.androidSafeAreaView}
+      // style={}
+      style={{
+        ...styles.androidSafeAreaView,
+        backgroundColor: `${isDarkColorScheme ? "#212529" : "white"}`,
+      }}
     >
       <View className="mb-4">
         <Text style={styles.welcomeText}>Welcome Karan!</Text>
       </View>
 
-      <Card className="w-full rounded-2xl">
+      <Card
+        className="w-full rounded-2xl"
+        style={{
+          backgroundColor: isDarkColorScheme ? "#292E32" : "#e5e5e5",
+        }}
+      >
         <CardContent className="p-4">
           <View>
             {settings?.map((setting, index) => (
@@ -74,7 +85,13 @@ export default function Profile() {
                 onPress={setting.onPress}
                 activeOpacity={0.6}
               >
-                <View className="flex flex-row items-center justify-between p-4 border-b-2 border-gray-50">
+                <View
+                  className={`flex flex-row items-center justify-between p-4 border-b ${
+                    isDarkColorScheme
+                      ? "border-b-gray-700"
+                      : "border-b-gray-100"
+                  }`}
+                >
                   <View className="flex flex-row gap-4 items-center">
                     <View>
                       {React.createElement(setting.icon, {
@@ -88,7 +105,13 @@ export default function Profile() {
                       <Text style={{ fontSize: 16 }}>{setting.name}</Text>
 
                       <View>
-                        <Text className="text-gray-600">
+                        <Text
+                          className={
+                            isDarkColorScheme
+                              ? "text-gray-300"
+                              : "text-gray-600"
+                          }
+                        >
                           {setting.description}
                         </Text>
                       </View>
@@ -115,7 +138,10 @@ export default function Profile() {
             >
               <Button
                 variant="outline"
-                style={{ borderColor: "#fa0f2e" }}
+                style={{
+                  borderColor: "#fa0f2e",
+                  backgroundColor: isDarkColorScheme ? "#292E32" : "#e5e5e5",
+                }}
                 onPress={handleLogout}
               >
                 <Text style={{ color: "#fa0f2e" }}>Logout</Text>
