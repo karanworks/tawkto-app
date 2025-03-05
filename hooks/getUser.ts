@@ -8,7 +8,7 @@ function useGetUser() {
   React.useEffect(() => {
     async function loadUser() {
       const storedUser = await getItem("user");
-      if (storedUser) setUser(storedUser);
+      // if (storedUser) setUser(storedUser);
       setUser(storedUser);
     }
     loadUser();

@@ -13,9 +13,13 @@ import { Label } from "~/components/ui/label";
 import useGetUser from "~/hooks/getUser";
 import { useEffect, useState } from "react";
 import { useColorScheme } from "~/lib/useColorScheme";
+import { updateWorkspace } from "~/slices/workspace/thunk";
+import { useAppDispatch } from "~/hooks/useAppDispatch";
 
 function WorkspaceSettings() {
   const user = useGetUser();
+
+  const dispatch = useAppDispatch();
   const [workspaceName, setWorkspaceName] = useState(
     user?.workspace?.name || ""
   );
@@ -29,6 +33,13 @@ function WorkspaceSettings() {
   function handleWorkspaceName(text: string) {
     setWorkspaceName(text);
   }
+
+  function handleUpdateDetails() {
+    dispatch(
+      updateWorkspace({ workspaceId: user?.workspace?.id, workspaceName })
+    ); // Dispatch the updateWorkspace thunk
+  }
+
   return (
     <View
       style={{
@@ -64,7 +75,7 @@ function WorkspaceSettings() {
         </CardContent>
         <CardFooter>
           <Pressable
-            onPress={() => console.log("Update details button clicked")}
+            onPress={handleUpdateDetails}
             style={styles.updateDetailsButtonContainer}
           >
             <View style={styles.updateDetailsButtonWrapper}>
