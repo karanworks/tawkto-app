@@ -37,7 +37,7 @@ export default function Login() {
 
   const lastNotificationResponse = Notifications.useLastNotificationResponse();
 
-  console.log("LAST NOTIFICATION RESPONSE ->", lastNotificationResponse);
+  // console.log("LAST NOTIFICATION RESPONSE ->", lastNotificationResponse);
 
   useEffect(() => {
     if (lastNotificationResponse) {

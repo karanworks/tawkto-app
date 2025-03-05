@@ -75,7 +75,7 @@ export default function Inbox() {
       <View className="flex flex-row gap-4">
         <Card
           className="flex-1 items-center"
-          style={{ backgroundColor: isDarkColorScheme ? "#292E32" : "#e5e5e5" }}
+          style={{ backgroundColor: isDarkColorScheme ? "#292E32" : "white" }}
         >
           <Pressable
             className="w-full items-center"
@@ -100,7 +100,7 @@ export default function Inbox() {
 
         <Card
           className="flex-1 items-center"
-          style={{ backgroundColor: isDarkColorScheme ? "#292E32" : "#e5e5e5" }}
+          style={{ backgroundColor: isDarkColorScheme ? "#292E32" : "white" }}
         >
           <Pressable
             className="w-full items-center"

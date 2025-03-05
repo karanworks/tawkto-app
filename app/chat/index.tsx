@@ -189,7 +189,12 @@ function ChatMessaging() {
             backgroundColor: `${isDarkColorScheme ? "#212529" : "white"}`,
           }}
         >
-          <View style={styles.header}>
+          <View
+            className={`border-b ${
+              isDarkColorScheme ? " border-gray-700" : "border-gray-200"
+            }`}
+            style={styles.header}
+          >
             <TouchableOpacity onPress={() => router.back()}>
               <Ionicons name="chevron-back" size={24} color={iconColor} />
             </TouchableOpacity>
@@ -246,12 +251,22 @@ function ChatMessaging() {
             </View>
           )} */}
 
-          <View style={styles.inputContainer}>
+          <View
+            className={`border-t ${
+              isDarkColorScheme ? " border-gray-700" : "border-gray-200"
+            }`}
+            style={styles.inputContainer}
+          >
             <TextInput
-              style={styles.input}
+              // style={styles.input}
+              style={{
+                ...styles.input,
+                backgroundColor: `${isDarkColorScheme ? "#424b52" : "#F5F5F5"}`,
+              }}
               value={newMessage}
               onChangeText={handleTypingMessage}
               placeholder="Type a message..."
+              placeholderTextColor={isDarkColorScheme ? "#fff" : "#999"}
               multiline
             />
             <TouchableOpacity
@@ -286,8 +301,8 @@ const styles = StyleSheet.create({
       Platform.OS === "android" && StatusBar.currentHeight
         ? StatusBar.currentHeight + 16
         : 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E5E5E5",
+    // borderBottomWidth: 1,
+    // borderBottomColor: "#E5E5E5",
   },
 
   headerAvatar: {
@@ -373,13 +388,13 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: "#E5E5E5",
+    // borderTopWidth: 1,
+    // borderTopColor: "#E5E5E5",
     alignItems: "flex-end",
   },
   input: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
+    // backgroundColor: "#F5F5F5",
     borderRadius: 5,
     paddingHorizontal: 16,
     paddingVertical: 14,

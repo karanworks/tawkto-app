@@ -31,6 +31,7 @@ function SolvedChat() {
   const { isDarkColorScheme } = useColorScheme();
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const iconColor = isDarkColorScheme ? "#fff" : "#000";
 
   function handleSolvedChat() {
     if (!solvedActiveChat) {
@@ -101,13 +102,16 @@ function SolvedChat() {
           }}
         >
           <View
+            className={`border-b ${
+              isDarkColorScheme ? " border-gray-700" : "border-gray-200"
+            }`}
             style={{
               ...styles.header,
               backgroundColor: `${isDarkColorScheme ? "#212529" : "white"}`,
             }}
           >
             <TouchableOpacity onPress={() => router.back()}>
-              <Ionicons name="chevron-back" size={24} color="#000" />
+              <Ionicons name="chevron-back" size={24} color={iconColor} />
             </TouchableOpacity>
 
             <View className="flex flex-row gap-2">
@@ -143,7 +147,12 @@ function SolvedChat() {
             inverted={false}
           />
 
-          <View style={styles.joinButtonContainer}>
+          <View
+            className={`border-t ${
+              isDarkColorScheme ? " border-gray-700" : "border-gray-200"
+            }`}
+            style={styles.joinButtonContainer}
+          >
             <TouchableOpacity
               onPress={handleSolvedChat}
               style={styles.joinButton}
@@ -184,8 +193,8 @@ const styles = StyleSheet.create({
         ? StatusBar.currentHeight + 16
         : 16,
     backgroundColor: "#FFFFFF",
-    borderBottomWidth: 1,
-    borderBottomColor: "#E5E5E5",
+    // borderBottomWidth: 1,
+    // borderBottomColor: "#E5E5E5",
   },
 
   headerAvatar: {
@@ -271,8 +280,8 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     paddingBlock: 18,
-    borderTopWidth: 1,
-    borderColor: "#F9FAFB",
+    // borderTopWidth: 1,
+    // borderColor: "#F9FAFB",
     gap: 5,
   },
   joinButton: {

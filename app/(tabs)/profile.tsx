@@ -74,7 +74,7 @@ export default function Profile() {
       <Card
         className="w-full rounded-2xl"
         style={{
-          backgroundColor: isDarkColorScheme ? "#292E32" : "#e5e5e5",
+          backgroundColor: isDarkColorScheme ? "#292E32" : "white",
         }}
       >
         <CardContent className="p-4">
@@ -140,7 +140,7 @@ export default function Profile() {
                 variant="outline"
                 style={{
                   borderColor: "#fa0f2e",
-                  backgroundColor: isDarkColorScheme ? "#292E32" : "#e5e5e5",
+                  backgroundColor: isDarkColorScheme ? "#292E32" : "white",
                 }}
                 onPress={handleLogout}
               >
