@@ -72,9 +72,9 @@ export function updateWorkspace({ workspaceId, workspaceName }: any) {
 //*****************************************************************//
 //*********************** UPDATE USER DETAILS *********************//
 //*****************************************************************//
-export function updateUser({ userId, user }: any) {
-  return api.patch(
-    `${process.env.EXPO_PUBLIC_SERVER_URL}/user/${userId}`,
-    user
-  );
+export function updateUser({ userId, name, email }: any) {
+  return api.patch(`${process.env.EXPO_PUBLIC_SERVER_URL}/user/${userId}`, {
+    name,
+    email,
+  });
 }

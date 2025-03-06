@@ -11,9 +11,34 @@ import { Input } from "~/components/ui/input";
 import { Text } from "~/components/ui/text";
 import { Label } from "~/components/ui/label";
 import { useColorScheme } from "~/lib/useColorScheme";
+import useGetUser from "~/hooks/getUser";
+import { useEffect, useState } from "react";
+import { useAppDispatch } from "~/hooks/useAppDispatch";
+import { updateUser } from "~/slices/user/thunk";
 
 function AccountSettings() {
+  const user = useGetUser();
+  const dispatch = useAppDispatch();
+
   const { isDarkColorScheme } = useColorScheme();
+  const [nameValue, setNameValue] = useState("");
+  const [emailValue, setEmailValue] = useState("");
+  // const [passwordValue, setPasswordValue] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      setNameValue(user?.name);
+      setEmailValue(user?.email);
+    }
+  }, [user]);
+
+  function handleUpdateDetails() {
+    console.log("Update details button clicked", nameValue, emailValue);
+    dispatch(
+      updateUser({ userId: user?.id, name: nameValue, email: emailValue })
+    );
+  }
+
   return (
     <View
       style={{
@@ -39,37 +64,40 @@ function AccountSettings() {
             <Label nativeID="name">Name</Label>
             <Input
               aria-labelledby="name"
-              defaultValue="Karan"
+              value={nameValue}
               style={{
                 backgroundColor: `${isDarkColorScheme ? "#424b52" : "white"}`,
               }}
+              onChangeText={(text) => setNameValue(text)}
             />
           </View>
           <View className="gap-1">
             <Label nativeID="email">Email</Label>
             <Input
               id="email"
-              defaultValue="karan@gmail.com"
+              value={emailValue}
               style={{
                 backgroundColor: `${isDarkColorScheme ? "#424b52" : "white"}`,
               }}
+              onChangeText={(text) => setEmailValue(text)}
             />
           </View>
-          <View className="gap-1">
+          {/* <View className="gap-1">
             <Label nativeID="password">Password</Label>
             <Input
               id="password"
-              defaultValue="123456"
+              value={passwordValue}
               secureTextEntry
               style={{
                 backgroundColor: `${isDarkColorScheme ? "#424b52" : "white"}`,
               }}
+              onChangeText={(text) => setPasswordValue(text)}
             />
-          </View>
+          </View> */}
         </CardContent>
         <CardFooter>
           <Pressable
-            onPress={() => console.log("Update details button clicked")}
+            onPress={handleUpdateDetails}
             style={styles.updateDetailsButtonContainer}
           >
             <View style={styles.updateDetailsButtonWrapper}>

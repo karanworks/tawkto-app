@@ -14,7 +14,7 @@ const initialState: InitialStateType = {
   loading: false,
 };
 
-const updateSlice = createSlice({
+const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {},
@@ -30,4 +30,4 @@ const updateSlice = createSlice({
   },
 });
 
-export default updateSlice.reducer;
+export default userSlice.reducer;
