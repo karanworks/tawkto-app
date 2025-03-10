@@ -15,6 +15,7 @@ import useGetUser from "~/hooks/getUser";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
 import { updateUser } from "~/slices/user/thunk";
+import { setItem } from "~/helper/storage";
 
 function AccountSettings() {
   const user = useGetUser();
@@ -33,10 +34,12 @@ function AccountSettings() {
   }, [user]);
 
   function handleUpdateDetails() {
-    console.log("Update details button clicked", nameValue, emailValue);
     dispatch(
       updateUser({ userId: user?.id, name: nameValue, email: emailValue })
-    );
+    ).then(async (res) => {
+      const updatedUserData = res.payload.data;
+      await setItem("user", { ...user, ...updatedUserData });
+    });
   }
 
   return (

@@ -15,20 +15,22 @@ import { useEffect, useState } from "react";
 import { useColorScheme } from "~/lib/useColorScheme";
 import { updateWorkspace } from "~/slices/workspace/thunk";
 import { useAppDispatch } from "~/hooks/useAppDispatch";
+import { setItem } from "~/helper/storage";
+import useGetWorkspace from "~/hooks/getWorkspace";
 
 function WorkspaceSettings() {
   const user = useGetUser();
+  const workspace = useGetWorkspace();
 
   const dispatch = useAppDispatch();
-  const [workspaceName, setWorkspaceName] = useState(
-    user?.workspace?.name || ""
-  );
+  const [workspaceName, setWorkspaceName] = useState(workspace?.name || "");
   const { isDarkColorScheme } = useColorScheme();
+
   useEffect(() => {
-    if (user?.workspace?.name) {
-      setWorkspaceName(user.workspace.name);
+    if (workspace?.name) {
+      setWorkspaceName(workspace?.name);
     }
-  }, [user?.workspace?.name]);
+  }, [workspace]);
 
   function handleWorkspaceName(text: string) {
     setWorkspaceName(text);
@@ -37,7 +39,10 @@ function WorkspaceSettings() {
   function handleUpdateDetails() {
     dispatch(
       updateWorkspace({ workspaceId: user?.workspace?.id, workspaceName })
-    ); // Dispatch the updateWorkspace thunk
+    ).then(async (res) => {
+      const updatedWorkspace = res.payload.data;
+      await setItem("workspace", { ...workspace, ...updatedWorkspace });
+    });
   }
 
   return (

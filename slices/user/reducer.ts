@@ -21,11 +21,10 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(updateUser.fulfilled, (state, action) => {
       const response = action.payload;
-      console.log("UPDATE USER RESPONSE ->", response);
 
-      // if (response.status === "success") {
-      //   state.workspace = response.data;
-      // }
+      if (response.status === "success") {
+        state.user = response.data;
+      }
     });
   },
 });
